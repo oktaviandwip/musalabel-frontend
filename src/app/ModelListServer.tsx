@@ -1,5 +1,3 @@
-// app/products/ModelList.server.tsx
-
 import { FC } from "react";
 import ModelListClient from "./ModelListClient";
 
@@ -14,7 +12,7 @@ interface Model {
 
 const fetchModels = async (): Promise<Model[]> => {
   const response = await fetch(
-    "https://f3f0-2001-448a-2074-6bdc-cc6e-28-a9ee-9c06.ngrok-free.app/products/?page=1&limit=12",
+    `${process.env.BASE_URL}/products/?page=1&limit=12`,
     {
       headers: {
         "Content-Type": "application/json",
