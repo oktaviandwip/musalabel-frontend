@@ -4,7 +4,7 @@ import logo from "@/assets/musalabel-logo-white.svg";
 export default function Footer() {
   return (
     <footer className=" bg-black text-white p-10">
-      <div className="container flex justify-between">
+      <div className="container flex-col sm:flex-row justify-between space-y-4">
         <div className="flex flex-col">
           <div>Contact us</div>
           <div className="flex flex-col">
