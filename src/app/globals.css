@@ -72,6 +72,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 h1 {
   @apply font-bold text-3xl leading-normal;
 }

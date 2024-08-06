@@ -9,7 +9,7 @@ export default async function Home() {
       <Header />
       <div className="container pt-28 min-h-screen">
         <HeroSection />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4 mt-72 sm:mt-28 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 lg:gap-4 mt-56 sm:mt-28 mb-10">
           <ModelListServer />
         </div>
       </div>

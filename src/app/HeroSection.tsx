@@ -19,8 +19,8 @@ export default function HeroSection() {
             Temukan model baju wanita muslim terbaru dengan kualitas terbaik dan
             harga terjangkau di sini.
           </div>
-          <Button asChild className="w-40 bg-gradient">
-            <Link href="/">Beli Sekarang</Link>
+          <Button asChild id="model-list" className="w-40 bg-gradient">
+            <Link href="#model-list">Beli Sekarang</Link>
           </Button>
         </div>
         <div className="absolute size-52 -top-28">
