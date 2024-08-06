@@ -250,28 +250,28 @@ export default function Header() {
                 <>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => router.push("/profile")}
                   >
                     Akun
                   </Button>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => router.push("/products/cart")}
                   >
                     Keranjang
                   </Button>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => router.push("/products/orders")}
                   >
                     Pesanan
                   </Button>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={handleLogout}
                   >
                     Keluar
@@ -281,14 +281,14 @@ export default function Header() {
                 <>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => router.push("/signup")}
                   >
                     Daftar
                   </Button>
                   <Button
                     variant={"secondary"}
-                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition- font-semibold"
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => router.push("/login")}
                   >
                     Masuk
