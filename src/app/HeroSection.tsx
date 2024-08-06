@@ -11,7 +11,7 @@ export default function HeroSection() {
   return (
     <>
       <div className="relative flex items-center h-[200px] sm:h-[325px] mt-24 sm:mt-14 rounded-md">
-        <div className="flex flex-col items-center text-white bg-black w-[550px] pt-64 pb-10 sm:p-10 gap-y-6 rounded-md mt-[200px]">
+        <div className="flex flex-col items-center text-white bg-black w-[550px] pt-[350px] pb-10 sm:p-10 gap-y-6 rounded-lg mt-[175px]">
           <h1 className="text-2xl text-center">
             Baju Muslim Wanita Berkualitas & Harga Terjangkau
           </h1>
@@ -23,7 +23,7 @@ export default function HeroSection() {
             <Link href="/">Beli Sekarang</Link>
           </Button>
         </div>
-        <div className="absolute size-52 -top-28">
+        <div className="absolute size-52 -top-20">
           <Image
             src={gamisCoklat}
             alt="Gamis coklat"
@@ -33,7 +33,7 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="absolute size-48 -top-24">
+        <div className="absolute size-48 -top-16">
           <Image
             src={gamisPink}
             alt="Gamis pink"
@@ -43,7 +43,7 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="absolute size-56 -top-24">
+        <div className="absolute size-56 -top-16">
           <Image
             src={gamisHijau}
             alt="Gamis hijau"
