@@ -343,7 +343,7 @@ export default function Checkout() {
             </Card>
             <div className="relative flex flex-col sm:flex-row justify-between sm:px-4">
               <Button
-                className="absolute top-12 sm:flex mt-4 bg-gradient text-white w-[280px] mx-4 sm:w-44"
+                className="absolute top-12 sm:flex mt-4 bg-gradient text-white w-full sm:w-44"
                 onClick={handlePayment}
               >
                 Lanjut ke Pembayaran
