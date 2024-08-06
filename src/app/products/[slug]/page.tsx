@@ -49,7 +49,7 @@ export default function Details() {
     async function fetchProduct() {
       try {
         const res = await fetch(
-          `http://localhost:8080/products/details/${slug}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/details/${slug}`
         );
         if (res.ok) {
           const { data } = await res.json();
@@ -123,16 +123,13 @@ export default function Details() {
             console.error("Failed to update item in cart");
           }
         } else {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/orders/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(orderData),
-            }
-          );
+          const res = await fetch(`${process.env.BASE_URL}/orders/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+          });
 
           if (res.ok) {
             const result = await res.json();
@@ -208,9 +205,9 @@ export default function Details() {
   return (
     <div>
       <Header />
-      <div className="flex p-4 pt-20">
+      <div className="flex flex-col sm:flex-row p-4 pt-20">
         {/* Carousel for Product Images */}
-        <Carousel className="w-1/3">
+        <Carousel className="sm:w-1/3">
           <CarouselContent>
             {data.Image.map((url, i) => (
               <CarouselItem key={i}>
@@ -229,12 +226,10 @@ export default function Details() {
         </Carousel>
 
         {/* Product Details */}
-        <div className="w-2/3 p-4 ml-10">
+        <div className="sm:w-2/3 p-4 sm:ml-10 text-justify sm:text-left mt-10">
           <h1 className="text-2xl font-bold mb-2">{data.Name}</h1>
-          <p className="mb-4 text-primary text-opacity-70">
-            {data.Description}
-          </p>
-          <h1 className="text-gradient">{formatter.format(data.Price)}</h1>
+          <p className="mb-4 text-primary">{data.Description}</p>
+          <h1 className="text-destructive">{formatter.format(data.Price)}</h1>
           <p className="mb-4 text-gray-400">Stok: {data.Stock}</p>
 
           {/* Size Selection */}
@@ -290,11 +285,11 @@ export default function Details() {
               onClick={handleAddToCart}
               className="bg-primary text-white px-4 py-2 rounded"
             >
-              Tambah ke Keranjang
+              <span className="hidden sm:flex">Tambah ke&nbsp;</span>Keranjang
             </Button>
             <Button
               onClick={handleBuyNow}
-              className="bg-destructive text-white px-4 py-2 rounded hover:bg-destructive hover:opacity-95"
+              className="bg-gradient text-white px-4 py-2 rounded hover:bg-destructive hover:opacity-95"
             >
               Beli Sekarang
             </Button>
