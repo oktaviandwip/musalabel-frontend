@@ -10,10 +10,12 @@ import { Button } from "@/components/ui/button";
 export default function HeroSection() {
   return (
     <>
-      <div className="relative flex items-center h-[325px] bg-black mt-14">
-        <div className="flex flex-col text-white w-[550px] p-10 gap-y-6">
-          <h1>Baju Muslim Wanita Berkualitas & Harga Terjangkau</h1>
-          <div className="leading-relaxed">
+      <div className="relative flex items-center h-[500px] sm:h-[325px] bg-black mt-20 sm:mt-14">
+        <div className="flex flex-col items-center text-white w-[550px] pt-48 sm:p-10 gap-y-6">
+          <h1 className="text-2xl text-center">
+            Baju Muslim Wanita Berkualitas & Harga Terjangkau
+          </h1>
+          <div className="hidden sm:flex leading-relaxed">
             Temukan model baju wanita muslim terbaru dengan kualitas terbaik dan
             harga terjangkau di sini.
           </div>
@@ -21,27 +23,35 @@ export default function HeroSection() {
             <Link href="/">Beli Sekarang</Link>
           </Button>
         </div>
-        <Image
-          src={gamisCoklat}
-          alt="Gamis pink"
-          width={310}
-          quality={100}
-          className="absolute right-56"
-        />
-        <Image
-          src={gamisPink}
-          alt="Gamis pink"
-          width={260}
-          quality={100}
-          className="absolute right-8"
-        />
-        <Image
-          src={gamisHijau}
-          alt="Gamis hijau"
-          width={350}
-          quality={100}
-          className="absolute right-20"
-        />
+        <div className="absolute size-52 -top-20">
+          <Image
+            src={gamisCoklat}
+            alt="Gamis coklat"
+            width={310}
+            quality={100}
+            className="absolute right-4 sm:right-56"
+          />
+        </div>
+
+        <div className="absolute size-48 -top-16">
+          <Image
+            src={gamisPink}
+            alt="Gamis pink"
+            width={260}
+            quality={100}
+            className="absolute -right-32 sm:right-8"
+          />
+        </div>
+
+        <div className="absolute size-56 -top-20">
+          <Image
+            src={gamisHijau}
+            alt="Gamis hijau"
+            width={350}
+            quality={100}
+            className="absolute -right-14 sm:right-20"
+          />
+        </div>
       </div>
     </>
   );
