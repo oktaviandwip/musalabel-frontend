@@ -341,14 +341,14 @@ export default function Checkout() {
                 </div>
               </div>
             </Card>
-            <div className="flex justify-between px-4">
+            <div className="relative flex flex-col sm:flex-row justify-between sm:px-4">
               <Button
-                className="mt-4 bg-gradient text-white w-44"
+                className="absolute top-12 sm:flex mt-4 bg-gradient text-white w-full sm:w-44"
                 onClick={handlePayment}
               >
                 Lanjut ke Pembayaran
               </Button>
-              <div className="flex items-center space-x-6 mt-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:space-x-6 sm:mt-4">
                 <p>Total Barang: {totalQuantity}</p>
                 <p>
                   Total Harga:{" "}
