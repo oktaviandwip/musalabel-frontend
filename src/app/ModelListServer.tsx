@@ -12,7 +12,7 @@ interface Model {
 
 const fetchModels = async (): Promise<Model[]> => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/products/?page=1&limit=12`,
+    `${process.env.BASE_URL}/products/?page=1&limit=12`,
     {
       headers: {
         "Content-Type": "application/json",
