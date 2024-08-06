@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 export default function HeroSection() {
   return (
     <>
-      <div className="relative flex items-center h-[450px] sm:h-[325px] bg-black mt-24 sm:mt-14 rounded-md">
-        <div className="flex flex-col items-center text-white w-[550px] pt-44 sm:p-10 gap-y-6">
+      <div className="relative flex items-center h-[200px] sm:h-[325px]  mt-24 sm:mt-14 rounded-md">
+        <div className="flex flex-col items-center text-white bg-black w-[550px] py-10 sm:p-10 gap-y-6 rounded-md mt-[500px]">
           <h1 className="text-2xl text-center">
             Baju Muslim Wanita Berkualitas & Harga Terjangkau
           </h1>
