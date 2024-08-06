@@ -11,7 +11,7 @@ export default function HeroSection() {
   return (
     <>
       <div className="relative flex items-center h-[200px] sm:h-[325px] mt-24 sm:mt-14 rounded-md">
-        <div className="flex flex-col items-center text-white bg-black w-[550px] pt-56 pb-10 sm:p-10 gap-y-6 rounded-md mt-[200px]">
+        <div className="flex flex-col items-center text-white bg-black w-[550px] pt-56 pb-10 sm:p-10 gap-y-6 rounded-lg mt-[200px]">
           <h1 className="text-2xl text-center">
             Baju Muslim Wanita Berkualitas & Harga Terjangkau
           </h1>
