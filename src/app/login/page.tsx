@@ -65,7 +65,6 @@ export default function Login() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    console.log(data);
 
     try {
       const response = await fetch(

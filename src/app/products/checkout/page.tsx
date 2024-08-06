@@ -96,7 +96,8 @@ export default function Checkout() {
       amount: totalPrice,
       payerEmail: profile?.Email,
       description: `Invoice for ${names} purchase`,
-      successRedirectURL: "http://localhost:3000/products/orders/",
+      successRedirectURL:
+        "https://musalabel-frontend.vercel.app/products/orders/",
       failureRedirectURL: "https://example.com/payment-failure",
     });
 

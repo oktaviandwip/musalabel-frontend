@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-apercu">
         <Header />
-        <div className="container min-h-[82vh]">{children}</div>
+        <div className="min-h-[82vh]">{children}</div>
         <Footer />
       </body>
     </html>

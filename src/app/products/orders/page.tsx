@@ -206,29 +206,31 @@ export default function Orders() {
 
   return (
     <div className="container pt-32">
-      <div className="flex justify-around mb-8">
-        {statusOptions.map((option: string) => (
-          <button
-            key={option}
-            className={`relative px-4 py-2 ${
-              status === option ? "text-destructive" : "text-gray-500"
-            }`}
-            onClick={() => setStatus(option)}
-          >
-            {option.charAt(0).toUpperCase() + option.slice(1)}
-            {counts[option] > 0 && (
-              <span className="absolute -top-1 -right-2 bg-destructive text-white text-s rounded-full size-6 flex items-center justify-center">
-                {counts[option]}
-              </span>
-            )}
-          </button>
-        ))}
+      <div className="overflow-x-auto w-full pt-4">
+        <div className="flex justify-around w-[640px] sm:w-full mb-8">
+          {statusOptions.map((option: string) => (
+            <button
+              key={option}
+              className={`relative px-4 py-2 ${
+                status === option ? "text-destructive" : "text-gray-500"
+              }`}
+              onClick={() => setStatus(option)}
+            >
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+              {counts[option] > 0 && (
+                <span className="absolute -top-1 -right-2 bg-destructive text-white text-s rounded-full size-6 flex items-center justify-center">
+                  {counts[option]}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {orders.length > 0 ? (
         orders.map((order) => {
           return (
-            <Card key={order.Purchase_id} className="p-4 mb-4">
+            <Card key={order.Purchase_id} className="p-4 pb-28 mb-4">
               <div
                 className={`${
                   profile?.Role !== "admin" ? "hidden" : "flex"
@@ -297,7 +299,7 @@ export default function Orders() {
                 </p>
               </div>
               <div
-                className={`flex ${
+                className={`relative flex ${
                   (status === "Belum Bayar" && profile?.Role !== "admin") ||
                   (status === "Sedang Dikemas" && profile?.Role === "admin") ||
                   (status === "Dikirim" && profile?.Role === "admin")
@@ -306,15 +308,15 @@ export default function Orders() {
                 } items-center my-2`}
               >
                 {status === "Belum Bayar" && profile?.Role !== "admin" && (
-                  <div className="space-x-4">
+                  <div className="absolute -bottom-14 w-full sm:flex sm:space-x-4">
                     <Button
-                      className="mt-4 bg-gradient text-white"
+                      className="w-full mt-4 bg-gradient text-white"
                       onClick={() => (window.location.href = order.invoice_url)}
                     >
                       Bayar Sekarang
                     </Button>
                     <Button
-                      className="mt-4 bg-secondary text-primary hover:bg-secondary hover:text-primary"
+                      className="absolute -bottom-12 left-0 w-full bg-secondary text-primary hover:bg-secondary hover:text-primary"
                       onClick={() => handleCancelOrder(order.Purchase_id)}
                     >
                       Batalkan
@@ -338,7 +340,7 @@ export default function Orders() {
                   </Button>
                 )}
                 <p className="flex items-center text-destructive font-bold mt-4 space-x-6">
-                  <span className="text-primary font-normal">
+                  <span className="text-primary font-normal ml-16">
                     Total Harga: &nbsp;
                   </span>
                   {new Intl.NumberFormat("id-ID", {
