@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 export default function HeroSection() {
   return (
     <>
-      <div className="relative flex items-center h-[500px] sm:h-[325px] bg-black mt-20 sm:mt-14">
-        <div className="flex flex-col items-center text-white w-[550px] pt-48 sm:p-10 gap-y-6">
+      <div className="relative flex items-center h-[550px] sm:h-[325px] bg-black sm:mt-14">
+        <div className="flex flex-col items-center text-white w-[550px] pt-72 sm:p-10 gap-y-6">
           <h1 className="text-2xl text-center">
             Baju Muslim Wanita Berkualitas & Harga Terjangkau
           </h1>
@@ -23,7 +23,7 @@ export default function HeroSection() {
             <Link href="/">Beli Sekarang</Link>
           </Button>
         </div>
-        <div className="absolute size-52 -top-20">
+        <div className="absolute size-52 top-4">
           <Image
             src={gamisCoklat}
             alt="Gamis coklat"
@@ -33,7 +33,7 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="absolute size-48 -top-16">
+        <div className="absolute size-48 top-8">
           <Image
             src={gamisPink}
             alt="Gamis pink"
@@ -43,7 +43,7 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="absolute size-56 -top-20">
+        <div className="absolute size-56 top-6">
           <Image
             src={gamisHijau}
             alt="Gamis hijau"
