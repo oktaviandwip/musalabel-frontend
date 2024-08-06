@@ -174,19 +174,19 @@ export default function Header() {
                       `${profile?.Role === "admin" ? "/admin" : "/profile"}`
                     )
                   }
-                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
+                  className="font-semibold text-primary hover:bg-primary hover:text-white"
                 >
                   {profile?.Role === "admin" ? "Admin" : "Akun"}
                 </Button>
                 <Button
                   onClick={() => router.push("/products/orders")}
-                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
+                  className="font-semibold text-primary hover:bg-primary hover:text-white"
                 >
                   Pesanan
                 </Button>
                 <Button
                   onClick={handleLogout}
-                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
+                  className="font-semibold text-primary hover:bg-primary hover:text-white"
                 >
                   Keluar
                 </Button>
@@ -237,8 +237,8 @@ export default function Header() {
                 <Image
                   src={photoProfile}
                   alt="Photo profile"
-                  width={40}
-                  height={40}
+                  width={80}
+                  height={80}
                   quality={100}
                   className="bg-white rounded-full"
                 />
@@ -246,34 +246,55 @@ export default function Header() {
             </Avatar>
             <div className="text-lg mb-6 mt-2">{profile?.Username}</div>
             <div className="flex flex-col space-y-2 w-full">
-              <Button
-                variant={"secondary"}
-                className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => router.push("/profile")}
-              >
-                Akun
-              </Button>
-              <Button
-                variant={"secondary"}
-                className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => router.push("/products/cart")}
-              >
-                Keranjang
-              </Button>
-              <Button
-                variant={"secondary"}
-                className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => router.push("/products/orders")}
-              >
-                Pesanan
-              </Button>
-              <Button
-                variant={"secondary"}
-                className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={handleLogout}
-              >
-                Keluar
-              </Button>
+              {isAuth ? (
+                <>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={() => router.push("/profile")}
+                  >
+                    Akun
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={() => router.push("/products/cart")}
+                  >
+                    Keranjang
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={() => router.push("/products/orders")}
+                  >
+                    Pesanan
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={handleLogout}
+                  >
+                    Keluar
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={() => router.push("/profile")}
+                  >
+                    Daftar
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={() => router.push("/products/cart")}
+                  >
+                    Masuk
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
