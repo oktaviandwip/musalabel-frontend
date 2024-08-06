@@ -55,11 +55,13 @@ const ModelListClient: React.FC<ModelListClientProps> = ({ models }) => {
               />
             </CardHeader>
             <CardContent className="space-y-1">
-              <CardTitle className="title">{model.Name}</CardTitle>
-              <CardTitle className="price text-destructive">
+              <CardTitle className="title text-center sm:text-left flex h-10 items-center justify-center">
+                {model.Name}
+              </CardTitle>
+              <CardTitle className="price text-center sm:text-left text-destructive">
                 {formatter.format(model.Price)}
               </CardTitle>
-              <CardDescription className="stok">
+              <CardDescription className="stok text-center sm:text-left">
                 Stok: {model.Stock}
               </CardDescription>
             </CardContent>
