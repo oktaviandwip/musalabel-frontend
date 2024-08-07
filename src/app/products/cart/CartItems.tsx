@@ -59,7 +59,7 @@ export default function CartItemCard({
   const totalPrice = price * quantity;
 
   return (
-    <Card className="grid grid-cols-8 gap-4 items-center p-4 border rounded-lg shadow-sm text-center hover:bg-secondary mt-4">
+    <Card className="w-[800px] sm:w-[1360px] grid grid-cols-8 gap-4 items-center p-4 border rounded-lg shadow-sm text-center hover:bg-secondary mt-4">
       <div>
         <input
           type="checkbox"

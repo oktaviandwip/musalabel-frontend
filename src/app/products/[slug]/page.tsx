@@ -123,13 +123,16 @@ export default function Details() {
             console.error("Failed to update item in cart");
           }
         } else {
-          const res = await fetch(`${process.env.BASE_URL}/orders/`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderData),
-          });
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/orders/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderData),
+            }
+          );
 
           if (res.ok) {
             const result = await res.json();

@@ -230,7 +230,10 @@ export default function Orders() {
       {orders.length > 0 ? (
         orders.map((order) => {
           return (
-            <Card key={order.Purchase_id} className="p-4 pb-28 mb-4">
+            <Card
+              key={order.Purchase_id}
+              className={`p-4 ${status === "Belum Bayar" ? "pb-28" : ""} mb-4`}
+            >
               <div
                 className={`${
                   profile?.Role !== "admin" ? "hidden" : "flex"
@@ -301,8 +304,8 @@ export default function Orders() {
               <div
                 className={`relative flex ${
                   (status === "Belum Bayar" && profile?.Role !== "admin") ||
-                  (status === "Sedang Dikemas" && profile?.Role === "admin") ||
-                  (status === "Dikirim" && profile?.Role === "admin")
+                  status === "Sedang Dikemas" ||
+                  status === "Dikirim"
                     ? "justify-between"
                     : "justify-end"
                 } items-center my-2`}

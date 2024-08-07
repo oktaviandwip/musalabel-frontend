@@ -60,7 +60,7 @@ export default function Cart() {
       <div className="container p-4 space-y-4 pt-24 min-h-[82vh]">
         {items.length > 0 ? (
           <>
-            <div className="sticky top-20 grid grid-cols-8 bg-white gap-4 p-4 text-center z-10">
+            <div className="sticky top-20 hidden sm:grid grid-cols-8 bg-white gap-4 p-4 text-center z-10">
               <div>
                 <input
                   type="checkbox"
@@ -77,27 +77,30 @@ export default function Cart() {
               <div>Total Price</div>
               <div>Action</div>
             </div>
+
             <div>
               {items.map((item, index) => (
-                <CartItems
-                  key={index}
-                  user_id={item.User_id}
-                  product_id={item.Product_id}
-                  image={item.Image}
-                  name={item.Name}
-                  size={item.Size}
-                  price={item.Price}
-                  quantity={item.Quantity}
-                  slug={item.Slug}
-                  isSelected={selectedItems.includes(
-                    createItemId(item.Product_id, item.Size)
-                  )}
-                  onSelect={handleSelectItem}
-                />
+                <div key={index} className="overflow-x-auto">
+                  <CartItems
+                    user_id={item.User_id}
+                    product_id={item.Product_id}
+                    image={item.Image}
+                    name={item.Name}
+                    size={item.Size}
+                    price={item.Price}
+                    quantity={item.Quantity}
+                    slug={item.Slug}
+                    isSelected={selectedItems.includes(
+                      createItemId(item.Product_id, item.Size)
+                    )}
+                    onSelect={handleSelectItem}
+                  />
+                </div>
               ))}
             </div>
-            <div className="sticky bottom-0 p-4 bg-white border rounded-lg w-full grid grid-cols-8 items-center gap-4">
-              <div className="col-span-1 flex justify-center">
+
+            <div className="sticky bottom-0 p-4 bg-white border rounded-lg grid grid-cols-8 items-center gap-4">
+              <div className="col-span-8 sm:col-span-1 flex justify-center">
                 <input
                   type="checkbox"
                   checked={selectedItems.length === items.length}
@@ -105,10 +108,10 @@ export default function Cart() {
                   className="size-6"
                 />
               </div>
-              <div className="col-span-3 flex justify-center">
+              <div className="col-span-8 sm:col-span-3 flex justify-center">
                 Total Products: {totalSelectedProducts}
               </div>
-              <div className="col-span-3 flex justify-center">
+              <div className="col-span-8 sm:col-span-3 flex justify-center">
                 Total Price:{" "}
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",
@@ -116,7 +119,7 @@ export default function Cart() {
                   maximumFractionDigits: 0,
                 }).format(totalPrice)}
               </div>
-              <div className="col-span-1 flex justify-center">
+              <div className="col-span-8 sm:col-span-1 flex justify-center">
                 <Button
                   className="bg-gradient text-white"
                   onClick={handleCheckout}
