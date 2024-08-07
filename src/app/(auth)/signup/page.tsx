@@ -43,6 +43,17 @@ export default function Signup() {
   const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
   const { data: session } = useSession();
 
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+    });
+  };
+
   // Handle Change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -79,7 +90,9 @@ export default function Signup() {
       if (response.ok) {
         router.push("/login");
       } else {
-        console.error("Signup failed:", response.statusText);
+        const data = await response.json();
+        handleToast("error", data.description);
+        console.error("Signup failed:", data.description);
       }
     } catch (error) {
       console.error("Error:", error);
