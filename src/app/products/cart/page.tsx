@@ -11,6 +11,7 @@ import { useState } from "react";
 import { setOrders } from "@/store/reducer/order";
 import noOrder from "@/assets/Shopping Cart.svg";
 import Image from "next/image";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Cart() {
   const router = useRouter();
@@ -49,7 +50,22 @@ export default function Cart() {
     0
   );
 
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+    });
+  };
+
   const handleCheckout = () => {
+    if (selectedItems.length === 0) {
+      handleToast("error", "Pilih minimal satu barang untuk melanjutkan!");
+      return;
+    }
     dispatch(setOrders(selectedProducts));
     router.push("/products/checkout");
   };

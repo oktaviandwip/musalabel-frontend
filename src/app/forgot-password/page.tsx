@@ -33,7 +33,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { toast } from "@/components/ui/use-toast"; // Import toast correctly
+import { toast } from "@/components/ui/use-toast";
 
 type Data = {
   email: string;
@@ -95,11 +95,14 @@ export default function Page() {
     }
   };
 
-  const handleToast = (desc: string) => {
+  const handleToast = (type: "success" | "error", desc: string) => {
     toast({
       description: desc,
-      className:
-        "bg-secondary text-primary absolute flex justify-center w-72 bottom-10 right-4",
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } absolute flex justify-center w-72 bottom-10 right-4`,
     });
   };
 
@@ -129,7 +132,7 @@ export default function Page() {
     );
 
     if (response.ok) {
-      handleToast("Password updated successfully!");
+      handleToast("success", "Password updated successfully!");
       router.push("/login");
     } else {
       const errorData = await response.json();
