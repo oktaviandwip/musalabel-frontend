@@ -102,7 +102,7 @@ export default function Page() {
         type === "success"
           ? "bg-secondary text-primary"
           : "bg-destructive text-white"
-      } absolute flex justify-center w-72 bottom-10 right-4`,
+      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
     });
   };
 

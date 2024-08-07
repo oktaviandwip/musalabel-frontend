@@ -232,7 +232,14 @@ export default function Orders() {
           return (
             <Card
               key={order.Purchase_id}
-              className={`p-4 ${status === "Belum Bayar" ? "pb-28" : ""} mb-4`}
+              className={`p-4 ${
+                status === "Belum Bayar"
+                  ? "pb-28"
+                  : (status === "Sedang Dikemas" || status === "Dikirim") &&
+                    profile?.Role === "admin"
+                  ? "pb-20"
+                  : ""
+              } mb-4`}
             >
               <div
                 className={`${
@@ -328,7 +335,7 @@ export default function Orders() {
                 )}
                 {status === "Sedang Dikemas" && profile?.Role === "admin" && (
                   <Button
-                    className="mt-4 bg-secondary text-primary hover:bg-secondary hover:text-primary"
+                    className="absolute -bottom-14 w-full sm:flex mt-4 bg-secondary text-primary hover:bg-secondary hover:text-primary"
                     onClick={() => handleConfirmSending(order.Purchase_id)}
                   >
                     Konfirmasi Pengiriman
@@ -336,7 +343,7 @@ export default function Orders() {
                 )}
                 {status === "Dikirim" && profile?.Role === "admin" && (
                   <Button
-                    className="mt-4 bg-secondary text-primary hover:bg-secondary hover:text-primary"
+                    className="absolute -bottom-14 w-full sm:flex mt-4 bg-secondary text-primary hover:bg-secondary hover:text-primary"
                     onClick={() => handleConfirmArrival(order.Purchase_id)}
                   >
                     Konfirmasi Sampai

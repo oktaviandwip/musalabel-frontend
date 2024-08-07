@@ -174,19 +174,19 @@ export default function Header() {
                       `${profile?.Role === "admin" ? "/admin" : "/profile"}`
                     )
                   }
-                  className="font-semibold text-primary hover:bg-primary hover:text-white"
+                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
                 >
                   {profile?.Role === "admin" ? "Admin" : "Akun"}
                 </Button>
                 <Button
                   onClick={() => router.push("/products/orders")}
-                  className="font-semibold text-primary hover:bg-primary hover:text-white"
+                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
                 >
                   Pesanan
                 </Button>
                 <Button
                   onClick={handleLogout}
-                  className="font-semibold text-primary hover:bg-primary hover:text-white"
+                  className="bg-secondary text-primary hover:bg-primary hover:text-white"
                 >
                   Keluar
                 </Button>

@@ -22,6 +22,7 @@ import type { AppDispatch, RootState } from "@/store";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import icon from "@/assets/musalabel-logo.svg";
+import { toast } from "@/components/ui/use-toast";
 
 type Data = {
   email: string;
@@ -53,6 +54,17 @@ export default function Login() {
     isGoogle: false,
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+    });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -104,7 +116,9 @@ export default function Login() {
           console.error("Invalid response data:", responseData);
         }
       } else {
-        console.error("Login failed:", response.statusText);
+        const data = await response.json();
+        handleToast("error", data.description);
+        console.error("Login failed:", data.description);
       }
     } catch (error) {
       console.error("Error:", error);
