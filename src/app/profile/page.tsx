@@ -274,8 +274,8 @@ export default function UserProfileForm() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mb-10"
           >
-            <div className="flex gap-4">
-              <div className="w-1/2 space-y-2">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="w-full sm:w-1/2 space-y-2">
                 <div className="flex justify-center">
                   <div className="relative group cursor-pointer w-36 h-36">
                     <Image
@@ -345,7 +345,11 @@ export default function UserProfileForm() {
                   )}
                 />
 
-                <Button type="button" onClick={openPasswordDialog}>
+                <Button
+                  type="button"
+                  onClick={openPasswordDialog}
+                  className="w-full sm:w-32"
+                >
                   Ganti Password
                 </Button>
 
@@ -377,7 +381,7 @@ export default function UserProfileForm() {
                   )}
                 />
               </div>
-              <div className="w-1/2 space-y-2">
+              <div className="w-full sm:w-1/2 space-y-2">
                 <FormField
                   control={form.control}
                   name="phone_number"
@@ -404,7 +408,7 @@ export default function UserProfileForm() {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-[240px] pl-3 text-left font-normal",
+                                "w-full sm:w-[240px] pl-3 text-left font-normal",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -504,6 +508,7 @@ export default function UserProfileForm() {
                   <Button
                     type="button"
                     onClick={() => setShowSecondAddress(true)}
+                    className="w-full sm:w-24"
                   >
                     Alamat 2
                   </Button>
@@ -513,6 +518,7 @@ export default function UserProfileForm() {
                   <Button
                     type="button"
                     onClick={() => setShowThirdAddress(true)}
+                    className="w-full sm:w-24"
                   >
                     Alamat 3
                   </Button>
@@ -544,10 +550,17 @@ export default function UserProfileForm() {
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
-              <Button type="button" variant="outline" onClick={handleCancel}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                className="w-1/2 sm:w-20"
+              >
                 Batalkan
               </Button>
-              <Button type="submit">Simpan</Button>
+              <Button type="submit" className="w-1/2 sm:w-20">
+                Simpan
+              </Button>
             </div>
           </form>
         </Form>

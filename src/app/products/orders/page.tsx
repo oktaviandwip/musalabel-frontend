@@ -207,7 +207,7 @@ export default function Orders() {
   return (
     <div className="container pt-32">
       <div className="overflow-x-auto w-full pt-4">
-        <div className="flex justify-around w-[640px] sm:w-full mb-8">
+        <div className="flex justify-around w-[800px] sm:w-full mb-8">
           {statusOptions.map((option: string) => (
             <button
               key={option}
@@ -233,7 +233,7 @@ export default function Orders() {
             <Card
               key={order.Purchase_id}
               className={`p-4 ${
-                status === "Belum Bayar"
+                status === "Belum Bayar" && profile?.Role !== "admin"
                   ? "pb-28"
                   : (status === "Sedang Dikemas" || status === "Dikirim") &&
                     profile?.Role === "admin"

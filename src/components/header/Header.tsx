@@ -251,9 +251,13 @@ export default function Header() {
                   <Button
                     variant={"secondary"}
                     className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    onClick={() => router.push("/profile")}
+                    onClick={() =>
+                      router.push(
+                        profile?.Role === "admin" ? "/admin" : "/profile"
+                      )
+                    }
                   >
-                    Akun
+                    {profile?.Role === "admin" ? "Admin" : "Akun"}
                   </Button>
                   <Button
                     variant={"secondary"}
