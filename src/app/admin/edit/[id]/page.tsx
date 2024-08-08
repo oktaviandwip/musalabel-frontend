@@ -64,7 +64,7 @@ export default function EditProduct({
   params,
 }: {
   params: {
-    slug: string;
+    id: string;
   };
 }) {
   const router = useRouter();
@@ -87,7 +87,7 @@ export default function EditProduct({
     async function fetchProduct() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.slug}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.id}`
         );
         if (res.ok) {
           const { data } = await res.json();
@@ -118,7 +118,7 @@ export default function EditProduct({
     }
 
     fetchProduct();
-  }, [params.slug, form]);
+  }, [params.id, form]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files ? Array.from(e.target.files) : [];
@@ -162,7 +162,7 @@ export default function EditProduct({
     formData.append("size", values.size.join(","));
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.slug}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.id}`,
       {
         method: "PATCH",
         body: formData,

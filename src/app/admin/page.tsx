@@ -25,8 +25,8 @@ interface Model {
   Image: string;
   Stock: number;
   Slug: string;
-  Price: number; // Add price field
-  Size: string; // Add size field
+  Price: number;
+  Size: string;
 }
 
 interface Meta {
@@ -169,7 +169,7 @@ export default function Admin() {
                   <TableCell>
                     <div className="flex justify-center text-white gap-x-4">
                       <Button className="size-10 bg-primary rounded-lg hover:bg-white hover:text-primary">
-                        <Link href={`/admin/edit/${model.Slug}`}>
+                        <Link href={`/admin/edit/${model.Id}`}>
                           <EditIcon />
                         </Link>
                       </Button>
