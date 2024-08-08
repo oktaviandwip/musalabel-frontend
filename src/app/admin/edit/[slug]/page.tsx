@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 // Define the size options
 const items = [
@@ -60,7 +60,14 @@ const formSchema = z.object({
     .nonempty({ message: "You have to select at least one item." }),
 });
 
-export default function EditProduct() {
+export default function EditProduct({
+  params,
+}: {
+  params: {
+    slug: string;
+  };
+}) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,12 +83,11 @@ export default function EditProduct() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [fileInputKey, setFileInputKey] = useState(0);
 
-  const { id } = useParams<{ id: string }>();
   useEffect(() => {
     async function fetchProduct() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.slug}`
         );
         if (res.ok) {
           const { data } = await res.json();
@@ -112,7 +118,7 @@ export default function EditProduct() {
     }
 
     fetchProduct();
-  }, [id, form]);
+  }, [params.slug, form]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files ? Array.from(e.target.files) : [];
@@ -155,10 +161,13 @@ export default function EditProduct() {
     formData.append("price", values.price.toString());
     formData.append("size", values.size.join(",")); // Send sizes as a comma-separated string
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${id}`, {
-      method: "PATCH",
-      body: formData,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${params.slug}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
 
     if (res.status === 201) {
       console.log("Success");
@@ -326,7 +335,12 @@ export default function EditProduct() {
             )}
           />
 
-          <Button type="submit">Simpan</Button>
+          <div className="space-x-4">
+            <Button variant="secondary" onClick={() => router.push("/admin")}>
+              Batalkan
+            </Button>
+            <Button type="submit">Simpan</Button>
+          </div>
         </form>
       </Form>
     </div>

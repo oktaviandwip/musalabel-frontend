@@ -49,7 +49,7 @@ export default function Details() {
     async function fetchProduct() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/products/details/${slug}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${slug}`
         );
         if (res.ok) {
           const { data } = await res.json();

@@ -41,7 +41,7 @@ export default function PaginationComponent({
   // Dynamically generate pagination items
   for (let i = startPage; i <= endPage; i++) {
     paginationItems.push(
-      <PaginationItem key={i} className="mt-4">
+      <PaginationItem key={i}>
         <PaginationLink
           onClick={() => setCurrentPage(i)}
           className={

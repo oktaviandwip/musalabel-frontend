@@ -16,7 +16,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Pagination from "@/components/pagination/Pagination";
-import Header from "@/components/header/Header";
+import { Input } from "@/components/ui/input";
+import { Icon } from "@iconify/react";
 
 interface Model {
   Id: string;
@@ -35,8 +36,8 @@ interface Meta {
 }
 
 async function getModels(
-  page: number = 1,
-  limit: number = 5
+  page: number,
+  limit: number
 ): Promise<{ data: Model[]; meta: Meta }> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/products/?page=${page}&limit=${limit}`
@@ -50,10 +51,23 @@ async function deleteModel(id: string): Promise<void> {
   });
 }
 
+async function searchModels(
+  search: string,
+  page: number,
+  limit: number
+): Promise<{ data: Model[]; meta: Meta }> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/products/?search=${search}&page=${page}&limit=${limit}`
+  );
+  return res.json();
+}
+
 export default function Admin() {
   const [data, setData] = useState<Model[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
   const itemsPerPage = 4;
   const maxPages = 4;
 
@@ -63,8 +77,23 @@ export default function Admin() {
     setTotalPages(Math.ceil(meta.total / itemsPerPage));
   }
 
+  async function searchData() {
+    const { data, meta } = await searchModels(
+      search,
+      currentPage,
+      itemsPerPage
+    );
+    setIsSearch(true);
+    setData(data);
+    setTotalPages(Math.ceil(meta.total / itemsPerPage));
+  }
+
   useEffect(() => {
-    fetchData();
+    if (isSearch) {
+      searchData();
+    } else {
+      fetchData();
+    }
   }, [currentPage]);
 
   const handleDelete = async (id: string) => {
@@ -84,7 +113,22 @@ export default function Admin() {
 
   return (
     <div className="pt-24">
-      <div className="flex justify-end my-4">
+      <div className="flex justify-between my-4">
+        <div className="relative">
+          <Icon
+            icon="mage:search"
+            className="absolute size-5 top-[10px] left-2 opacity-50"
+            onClick={searchData}
+          />
+          <Input
+            type="search"
+            className="pl-10 w-44"
+            placeholder="Hasfshah"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
         <Button>
           <Link href="/admin/create">Add Product</Link>
         </Button>
@@ -125,7 +169,7 @@ export default function Admin() {
                   <TableCell>
                     <div className="flex justify-center text-white gap-x-4">
                       <Button className="size-10 bg-primary rounded-lg hover:bg-white hover:text-primary">
-                        <Link href={`/admin/edit/${model.Id}`}>
+                        <Link href={`/admin/edit/${model.Slug}`}>
                           <EditIcon />
                         </Link>
                       </Button>
@@ -147,12 +191,14 @@ export default function Admin() {
             })}
         </TableBody>
       </Table>
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        maxPages={maxPages}
-      />
+      <div className={totalPages <= 1 ? "hidden" : "flex mt-4"}>
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          maxPages={maxPages}
+        />
+      </div>
     </div>
   );
 }
