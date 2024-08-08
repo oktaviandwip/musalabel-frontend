@@ -108,7 +108,7 @@ export default function EditProduct({
           form.setValue("description", data.Description);
           form.setValue("stock", data.Stock);
           form.setValue("price", data.Price);
-          form.setValue("size", data.Size.split(",")); // Ensure the size field is set correctly
+          form.setValue("size", data.Size.split(","));
         } else {
           console.error("Failed to fetch the product data");
         }
@@ -133,7 +133,7 @@ export default function EditProduct({
     }
     // Reset the input to allow re-selection of the same file
     e.target.value = "";
-    setFileInputKey((prev) => prev + 1); // Change the key to re-render the input
+    setFileInputKey((prev) => prev + 1);
   }
 
   function removeImage(index: number) {
@@ -159,10 +159,10 @@ export default function EditProduct({
     formData.append("description", values.description);
     formData.append("stock", values.stock.toString());
     formData.append("price", values.price.toString());
-    formData.append("size", values.size.join(",")); // Send sizes as a comma-separated string
+    formData.append("size", values.size.join(","));
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/${params.slug}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.slug}`,
       {
         method: "PATCH",
         body: formData,
@@ -171,6 +171,7 @@ export default function EditProduct({
 
     if (res.status === 201) {
       console.log("Success");
+      router.push("/admin");
     } else {
       console.error("Failed to submit the form");
     }
