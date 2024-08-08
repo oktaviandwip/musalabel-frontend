@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import noOrder from "@/assets/Shopping Cart.svg";
+import { toast } from "@/components/ui/use-toast";
 
 type AddressKey = "Address1" | "Address2" | "Address3";
 
@@ -84,9 +85,20 @@ export default function Checkout() {
     setDeliveryCost(cost);
   };
 
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+    });
+  };
+
   const handlePayment = async () => {
     if (!profile?.Phone_number || !selectedAddress) {
-      setErrorMessage("No. Telp dan Alamat tidak boleh kosong.");
+      handleToast("error", "No. Telp dan Alamat tidak boleh kosong.");
       return;
     }
 
@@ -96,9 +108,8 @@ export default function Checkout() {
       amount: totalPrice,
       payerEmail: profile?.Email,
       description: `Invoice for ${names} purchase`,
-      successRedirectURL:
-        "https://musalabel-frontend.vercel.app/products/orders/",
-      failureRedirectURL: "https://example.com/payment-failure",
+      successRedirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/products/orders/`,
+      failureRedirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/products/orders/`,
     });
 
     try {
@@ -253,12 +264,6 @@ export default function Checkout() {
     <>
       <Header />
       <div className="container space-y-4 py-32 min-h-screen">
-        {errorMessage && (
-          <div className="bg-red-100 text-red-600 p-3 rounded">
-            {errorMessage}
-          </div>
-        )}
-
         {selectedItems.length === 0 ? (
           <div className="flex flex-col justify-center items-center h-64">
             <Image src={noOrder} alt="No orders" width={100} height={100} />
