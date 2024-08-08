@@ -80,7 +80,9 @@ export default function EditProduct() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`http://localhost:8080/products/${id}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${id}`
+        );
         if (res.ok) {
           const { data } = await res.json();
           const imageUrls = data.Image.split(",");
