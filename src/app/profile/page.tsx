@@ -346,9 +346,10 @@ export default function UserProfileForm() {
                 />
 
                 <Button
+                  variant={"secondary"}
                   type="button"
                   onClick={openPasswordDialog}
-                  className="w-full sm:w-32"
+                  className="w-32"
                 >
                   Ganti Password
                 </Button>
@@ -506,9 +507,10 @@ export default function UserProfileForm() {
 
                 {!showSecondAddress && (
                   <Button
+                    variant={"secondary"}
                     type="button"
                     onClick={() => setShowSecondAddress(true)}
-                    className="w-full sm:w-24"
+                    className="w-24"
                   >
                     Alamat 2
                   </Button>
@@ -516,9 +518,10 @@ export default function UserProfileForm() {
 
                 {showSecondAddress && !showThirdAddress && (
                   <Button
+                    variant={"secondary"}
                     type="button"
                     onClick={() => setShowThirdAddress(true)}
-                    className="w-full sm:w-24"
+                    className="w-24"
                   >
                     Alamat 3
                   </Button>

@@ -76,6 +76,12 @@ export default function Admin() {
     }
   };
 
+  const formatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  });
+
   return (
     <div className="pt-24">
       <div className="flex justify-end my-4">
@@ -113,7 +119,7 @@ export default function Admin() {
                     />
                   </TableCell>
                   <TableCell>{model.Name}</TableCell>
-                  <TableCell>{model.Price}</TableCell>
+                  <TableCell>{formatter.format(model.Price)}</TableCell>
                   <TableCell>{model.Stock}</TableCell>
                   <TableCell>{model.Size}</TableCell>
                   <TableCell>
