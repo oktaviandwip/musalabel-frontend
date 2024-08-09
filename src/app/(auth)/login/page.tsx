@@ -33,10 +33,17 @@ type Data = {
 export default function Login() {
   const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
+  const { data: session } = useSession();
 
   const { isAuth } = useSelector((state: RootState) => state.auth);
   const { profile } = useSelector((state: RootState) => state.user);
-  const { data: session } = useSession();
+
+  const [data, setData] = useState<Data>({
+    email: "",
+    password: "",
+    isGoogle: false,
+  });
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (isAuth) {
@@ -47,13 +54,6 @@ export default function Login() {
       }
     }
   }, [isAuth, profile, router]);
-
-  const [data, setData] = useState<Data>({
-    email: "",
-    password: "",
-    isGoogle: false,
-  });
-  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleToast = (type: "success" | "error", desc: string) => {
     toast({
@@ -125,20 +125,33 @@ export default function Login() {
     }
   };
 
+  useEffect(() => {
+    if (session) {
+      setData({
+        email: session?.user?.email || "",
+        password: "",
+        isGoogle: false,
+      });
+    }
+  }, [session]);
+
   const handleGoogleLogin = () => {
-    signIn("google");
+    if (!session) {
+      signIn("google");
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        isGoogle: true,
+      }));
+    }
   };
 
   useEffect(() => {
-    if (session) {
-      setData((prevData) => ({
-        ...prevData,
-        email: session.user?.email || "",
-        isGoogle: true,
-      }));
+    console.log(data);
+    if (data.isGoogle) {
       handleSubmit();
     }
-  }, [session]);
+  }, [data.isGoogle]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen space-y-10 py-10">
@@ -173,7 +186,7 @@ export default function Login() {
                 value={data.password}
                 placeholder="*********"
                 onChange={handleChange}
-                required
+                required={!data.isGoogle} // Password not required if signed in with Google
                 className="pr-10"
               />
               <Icon

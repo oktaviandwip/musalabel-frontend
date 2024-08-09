@@ -57,6 +57,11 @@ export default function Signup() {
 
   // Handle Change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setData((prevData) => ({
+      ...prevData,
+      image: "",
+    }));
+
     const { id, value } = e.target;
 
     if (id === "phone_number") {
@@ -100,21 +105,36 @@ export default function Signup() {
     }
   };
 
+  useEffect(() => {
+    if (session) {
+      setData({
+        email: session.user?.email || "",
+        image: session.user?.image || "",
+        phone_number: "",
+        password: "",
+        confirmPass: "",
+        isGoogle: false,
+      });
+    }
+  }, [session]);
+
   const handleGoogleSignup = () => {
-    signIn("google");
+    if (!session) {
+      signIn("google");
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        isGoogle: true,
+      }));
+    }
   };
 
   useEffect(() => {
-    if (session) {
-      setData((prevData) => ({
-        ...prevData,
-        email: session.user?.email || "",
-        image: session.user?.image || "",
-        isGoogle: true,
-      }));
+    console.log(data);
+    if (data.isGoogle) {
       handleSubmit();
     }
-  }, [session]);
+  }, [data.isGoogle]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen space-y-10 py-10">

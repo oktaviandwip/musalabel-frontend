@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className="font-apercu">
         <StoreProvider>
           <Providers>
-            <main>{children}</main>
+            <div>{children}</div>
             <Toaster />
           </Providers>
         </StoreProvider>
