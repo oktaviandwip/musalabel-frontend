@@ -13,12 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="font-apercu">
-        <Header />
-        <div className="min-h-[82vh]">{children}</div>
-        <Footer />
-      </body>
-    </html>
+    <div className="font-apercu">
+      <Header />
+      <div className="min-h-[82vh]">{children}</div>
+      <Footer />
+    </div>
   );
 }

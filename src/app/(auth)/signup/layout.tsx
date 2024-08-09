@@ -12,10 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="font-apercu">
-        {children} <Toaster />
-      </body>
-    </html>
+    <div className="font-apercu">
+      {children} <Toaster />
+    </div>
   );
 }

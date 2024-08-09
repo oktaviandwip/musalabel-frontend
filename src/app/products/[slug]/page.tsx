@@ -12,13 +12,15 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addItemToCart,
   updateItemInCart,
   setOrders,
-} from "@/store/reducer/order"; // Adjust path if necessary
-import { RootState } from "@/store"; // Adjust path if necessary
+} from "@/store/reducer/order";
+import { RootState } from "@/store";
+import { toast } from "@/components/ui/use-toast";
 
 type ProductData = {
   Id: string;
@@ -31,6 +33,17 @@ type ProductData = {
   Size: string[];
   Created_at: string;
   Updated_at: string | null;
+};
+
+const handleToast = (type: "success" | "error", desc: string) => {
+  toast({
+    description: desc,
+    className: `${
+      type === "success"
+        ? "bg-secondary text-primary"
+        : "bg-destructive text-white"
+    } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+  });
 };
 
 export default function Details() {
@@ -164,7 +177,8 @@ export default function Details() {
         console.error("Error:", error);
       }
     } else {
-      console.error("No size selected or data is missing");
+      handleToast("error", "Pilih ukuran yang diinginkan");
+      console.error("Pilih ukuran yang diinginkan");
     }
   };
 
@@ -206,9 +220,9 @@ export default function Details() {
   if (!data) return null;
 
   return (
-    <div>
+    <>
       <Header />
-      <div className="flex flex-col sm:flex-row p-4 pt-20">
+      <div className="flex flex-col sm:flex-row p-4 pt-20 min-h-screen">
         {/* Carousel for Product Images */}
         <Carousel className="sm:w-1/3">
           <CarouselContent>
@@ -299,6 +313,7 @@ export default function Details() {
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

@@ -11,18 +11,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="id">
       <head>
         <link rel="icon" href="/favicon.png" />
       </head>
       <body className="font-apercu">
         <StoreProvider>
           <Providers>
-            <div>{children}</div>
+            <main>{children}</main>
             <Toaster />
           </Providers>
         </StoreProvider>

@@ -87,7 +87,7 @@ export default function EditProduct({
     async function fetchProduct() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/products/details/${params.id}`
         );
         if (res.ok) {
           const { data } = await res.json();
@@ -170,7 +170,6 @@ export default function EditProduct({
     );
 
     if (res.status === 201) {
-      console.log("Success");
       router.push("/admin");
     } else {
       console.error("Failed to submit the form");

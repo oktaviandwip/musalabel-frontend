@@ -3,7 +3,7 @@ import Footer from "@/components/footer/Footer";
 import HeroSection from "@/app/HeroSection";
 import ModelListServer from "@/app/ModelListServer";
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className="font-apercu min-h-screen">
       <Header />

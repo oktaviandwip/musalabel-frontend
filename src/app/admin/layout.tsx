@@ -12,11 +12,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="container font-apercu pb-20">
-        <Header />
-        {children}
-      </body>
-    </html>
+    <div className="container font-apercu pb-20">
+      <Header />
+      {children}
+    </div>
   );
 }
