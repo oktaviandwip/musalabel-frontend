@@ -51,7 +51,6 @@ export default function Checkout() {
     Address2: profile?.Address2 || "",
     Address3: profile?.Address3 || "",
   });
-  const [errorMessage, setErrorMessage] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(7000);
 
@@ -108,8 +107,8 @@ export default function Checkout() {
       amount: totalPrice,
       payerEmail: profile?.Email,
       description: `Invoice for ${names} purchase`,
-      successRedirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/products/orders/`,
-      failureRedirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/products/orders/`,
+      successRedirectURL: `${process.env.NEXT_PUBLIC_FE_URL}/products/orders/`,
+      failureRedirectURL: `${process.env.NEXT_PUBLIC_FE_URL}/products/orders/`,
     });
 
     try {
