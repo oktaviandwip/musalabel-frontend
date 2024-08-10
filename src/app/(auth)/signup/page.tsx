@@ -55,6 +55,22 @@ export default function Signup() {
     });
   };
 
+  useEffect(() => {
+    if (session) {
+      setData((prevData) => ({
+        ...prevData,
+        email: session.user?.email || "",
+        image: session.user?.image || "",
+      }));
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (data.isGoogle) {
+      handleSubmit();
+    }
+  }, [data.isGoogle]);
+
   // Handle Change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData((prevData) => ({
@@ -105,22 +121,9 @@ export default function Signup() {
     }
   };
 
-  useEffect(() => {
-    if (session) {
-      setData({
-        email: session.user?.email || "",
-        image: session.user?.image || "",
-        phone_number: "",
-        password: "",
-        confirmPass: "",
-        isGoogle: false,
-      });
-    }
-  }, [session]);
-
   const handleGoogleSignup = () => {
     if (!session) {
-      signIn("google");
+      signIn("google", { callbackUrl: "/api/auth/callback-signup" });
     } else {
       setData((prevData) => ({
         ...prevData,
@@ -128,13 +131,6 @@ export default function Signup() {
       }));
     }
   };
-
-  useEffect(() => {
-    console.log(data);
-    if (data.isGoogle) {
-      handleSubmit();
-    }
-  }, [data.isGoogle]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen space-y-10 py-10">

@@ -75,6 +75,21 @@ export default function Login() {
     }));
   };
 
+  useEffect(() => {
+    if (session) {
+      setData((prevData) => ({
+        ...prevData,
+        email: session.user?.email || "",
+      }));
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (data.isGoogle) {
+      handleSubmit();
+    }
+  }, [data.isGoogle]);
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
@@ -125,19 +140,9 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    if (session) {
-      setData({
-        email: session?.user?.email || "",
-        password: "",
-        isGoogle: false,
-      });
-    }
-  }, [session]);
-
   const handleGoogleLogin = () => {
     if (!session) {
-      signIn("google");
+      signIn("google", { callbackUrl: "/api/auth/callback-login" });
     } else {
       setData((prevData) => ({
         ...prevData,

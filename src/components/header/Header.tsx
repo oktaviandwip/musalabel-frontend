@@ -16,13 +16,14 @@ import { logout } from "@/store/reducer/auth";
 import { getProfile } from "@/store/reducer/user";
 import { clearCart } from "@/store/reducer/order";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { AppDispatch, RootState } from "@/store";
 import { Icon } from "@iconify/react";
 import noOrder from "@/assets/Shopping Cart.svg";
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch: AppDispatch = useDispatch();
 
   const { isAuth } = useSelector((state: RootState) => state.auth);
@@ -47,6 +48,12 @@ export default function Header() {
     dispatch(clearCart());
   };
 
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/products/cart", label: "Keranjang" },
+    { href: "/products/orders", label: "Pesanan" },
+  ];
+
   return (
     <header className="fixed inset-x-0 flex items-center h-20 z-50 bg-white border-b-[1px]">
       <div className="flex justify-between container">
@@ -59,16 +66,24 @@ export default function Header() {
             quality={100}
           />
         </Link>
-        <nav className="hidden lg:flex items-center space-x-14 text-primary text-sm">
-          <Link href="/" className="hover:text-gray-500">
-            Home
-          </Link>
-          <Link href="/products/cart" className="hover:text-gray-500">
-            Keranjang
-          </Link>
-          <Link href="/products/orders" className="hover:text-gray-500">
-            Pesanan
-          </Link>
+        <nav className="hidden lg:flex items-center space-x-10 text-primary text-sm">
+          {navItems.map((item) => {
+            const isActive = pathname.endsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`${
+                  isActive
+                    ? "text-primary border-destructive border-b-2 pt-[2px]"
+                    : "text-gray-500"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
         {isAuth ? (
           <div className="relative flex items-center">

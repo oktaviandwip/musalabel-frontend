@@ -55,7 +55,7 @@ const ModelListClient: React.FC<ModelListClientProps> = ({ models }) => {
               />
             </CardHeader>
             <CardContent className="space-y-1">
-              <CardTitle className="title text-center sm:text-left flex h-10 items-center justify-center">
+              <CardTitle className="title text-center sm:text-left flex h-10 items-center justify-center sm:justify-start">
                 {model.Name}
               </CardTitle>
               <CardTitle className="price text-center sm:text-left text-destructive">
