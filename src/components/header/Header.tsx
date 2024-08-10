@@ -32,6 +32,7 @@ export default function Header() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const totalProducts = items.length;
 
@@ -176,7 +177,10 @@ export default function Header() {
                   onClick={() => setSidebarOpen(true)}
                 />
               </div>
-              <HoverCardTrigger className="hidden lg:flex items-center space-x-4 cursor-pointer">
+              <div
+                className="hidden lg:flex items-center space-x-4 cursor-pointer"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
                 <span className="text-lg">
                   {profile?.Username || "new user"}
                 </span>
@@ -198,8 +202,12 @@ export default function Header() {
                     />
                   </AvatarFallback>
                 </Avatar>
-              </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col space-y-2 text-left">
+              </div>
+              <div
+                className={`${
+                  isProfileOpen ? "absolute top-14 right-0" : "hidden"
+                } flex flex-col space-y-2 text-left bg-white p-4 rounded-md`}
+              >
                 <Button
                   onClick={() =>
                     router.push(
@@ -222,7 +230,7 @@ export default function Header() {
                 >
                   Keluar
                 </Button>
-              </HoverCardContent>
+              </div>
             </HoverCard>
           </div>
         ) : (
