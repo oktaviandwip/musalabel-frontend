@@ -104,7 +104,7 @@ export default function Checkout() {
 
   const handlePayment = async () => {
     if (!profile?.Full_name || !profile?.Phone_number || !selectedAddress) {
-      handleToast("error", "Nama, No. Telp, dan Alamat tidak boleh kosong.");
+      handleToast("error", "Nama, No. Telp, dan Alamat tidak boleh kosong");
       return;
     }
 

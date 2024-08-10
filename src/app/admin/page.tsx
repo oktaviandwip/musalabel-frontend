@@ -122,7 +122,7 @@ export default function Admin() {
           />
           <Input
             type="search"
-            className="pl-10 w-44"
+            className="pl-10 w-44 sm:w-64"
             placeholder="Hasfshah"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
