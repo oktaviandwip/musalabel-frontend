@@ -31,6 +31,7 @@ export default function Header() {
   const { items } = useSelector((state: RootState) => state.order);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const totalProducts = items.length;
 
@@ -48,11 +49,18 @@ export default function Header() {
     dispatch(clearCart());
   };
 
-  const navItems = [
+  const navUser = [
     { href: "/", label: "Home" },
     { href: "/products/cart", label: "Keranjang" },
     { href: "/products/orders", label: "Pesanan" },
   ];
+
+  const navAdmin = [
+    { href: "/admin", label: "Admin" },
+    { href: "/admin/dashboard", label: "Dashboard" },
+  ];
+
+  const navItems = pathname.startsWith("/admin") ? navAdmin : navUser;
 
   return (
     <header className="fixed inset-x-0 flex items-center h-20 z-50 bg-white border-b-[1px]">
@@ -66,7 +74,9 @@ export default function Header() {
             quality={100}
           />
         </Link>
-        <nav className="hidden lg:flex items-center space-x-10 text-primary text-sm">
+        <nav
+          className={`hidden lg:flex items-center space-x-10 text-primary text-sm`}
+        >
           {navItems.map((item) => {
             const isActive = pathname.endsWith(item.href);
 
@@ -74,10 +84,8 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${
-                  isActive
-                    ? "text-primary border-destructive border-b-2 pt-[2px]"
-                    : "text-gray-500"
+                className={`px-4 py-2 ${
+                  isActive ? "text-primary bg-secondary rounded-md" : ""
                 }`}
               >
                 {item.label}
@@ -87,22 +95,27 @@ export default function Header() {
         </nav>
         {isAuth ? (
           <div className="relative flex items-center">
-            <HoverCard>
-              <HoverCardTrigger
-                className="relative cursor-pointer"
-                onClick={() => router.push("/products/cart")}
-              >
-                <Icon icon="mage:shopping-cart" className="text-2xl mr-4" />
-                {totalProducts > 0 && (
-                  <span className="absolute top-1 right-4 transform translate-x-1/2 -translate-y-1/2 bg-destructive text-white text-xs font-bold rounded-full size-5 flex items-center justify-center">
-                    {totalProducts}
-                  </span>
-                )}
-              </HoverCardTrigger>
-              <HoverCardContent className="w-72 max-h-[420px] flex flex-col">
-                <div className="flex-1 overflow-y-auto p-2">
-                  {totalProducts > 0 ? (
-                    items.map((item) => (
+            <div
+              className="relative cursor-pointer"
+              onClick={() => setIsCartOpen(!isCartOpen)}
+            >
+              <Icon icon="mage:shopping-cart" className="text-2xl mr-4" />
+              {totalProducts > 0 && (
+                <span className="absolute top-1 right-4 transform translate-x-1/2 -translate-y-1/2 bg-destructive text-white text-xs font-bold rounded-full size-5 flex items-center justify-center">
+                  {totalProducts}
+                </span>
+              )}
+            </div>
+
+            <div
+              className={`${
+                isCartOpen ? "absolute top-10 -left-60" : "hidden"
+              } w-72 max-h-[420px] flex-col`}
+            >
+              <div className="flex-1 overflow-y-auto p-2">
+                {totalProducts > 0 ? (
+                  <div className="border p-6 rounded-md mr-4 bg-white">
+                    {items.map((item) => (
                       <Link
                         key={item.Product_id}
                         href={`/products/${item.Slug}`}
@@ -125,31 +138,35 @@ export default function Header() {
                           </p>
                         </div>
                       </Link>
-                    ))
-                  ) : (
-                    <div className="flex flex-col justify-center items-center space-y-2">
-                      <Image
-                        src={noOrder}
-                        alt="No orders"
-                        width={50}
-                        height={50}
-                      />
-                      <p className="text-center text-primary">
-                        Belum ada pesanan
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <Button
-                  className={`${
-                    totalProducts > 0 ? "flex" : "hidden"
-                  } w-full bg-gradient mt-4`}
-                  onClick={() => router.push("/products/cart")}
-                >
-                  Keranjang Belanja
-                </Button>
-              </HoverCardContent>
-            </HoverCard>
+                    ))}
+                    <Button
+                      className={`${
+                        totalProducts > 0 ? "flex" : "hidden"
+                      } w-full bg-gradient mt-4`}
+                      onClick={() => router.push("/products/cart")}
+                    >
+                      Keranjang Belanja
+                    </Button>
+                  </div>
+                ) : (
+                  <div
+                    className={`${
+                      isCartOpen ? "flex" : "hidden"
+                    } flex-col w-64 h-56 rounded-lg justify-center items-center space-y-2 bg-white border`}
+                  >
+                    <Image
+                      src={noOrder}
+                      alt="No orders"
+                      width={100}
+                      height={100}
+                    />
+                    <p className="text-center text-primary">
+                      Belum ada pesanan
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
 
             <HoverCard>
               <div className="flex lg:hidden bg-white mt-[2px]">

@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 // Define the size options
 const items = [
@@ -54,6 +55,8 @@ const formSchema = z.object({
 });
 
 export default function CreateProduct() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -110,13 +113,14 @@ export default function CreateProduct() {
     formData.append("size", values.size.join(","));
 
     try {
-      const res = await fetch("http://localhost:8080/products/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/products/`, {
         method: "POST",
         body: formData,
       });
 
       if (res.ok) {
         console.log("Success");
+        router.push("/admin");
       } else {
         const error = await res.json();
         console.error("Failed to submit the form:", error.message);
@@ -155,9 +159,9 @@ export default function CreateProduct() {
             name="image"
             render={() => (
               <FormItem className="relative">
-                <FormLabel>Images</FormLabel>
+                <FormLabel>Foto</FormLabel>
                 <FormControl>
-                  <Input readOnly placeholder="Choose Images" />
+                  <Input readOnly placeholder="Pilih foto" />
                 </FormControl>
                 <FormControl>
                   <Input
@@ -175,7 +179,7 @@ export default function CreateProduct() {
           />
 
           <Button type="button" onClick={resetImages} variant="secondary">
-            Reset Images
+            Reset Foto
           </Button>
 
           <FormField
@@ -183,7 +187,7 @@ export default function CreateProduct() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nama</FormLabel>
                 <FormControl>
                   <Input placeholder="Basic Dress Asma" {...field} />
                 </FormControl>
@@ -197,7 +201,7 @@ export default function CreateProduct() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Deskripsi</FormLabel>
                 <FormControl>
                   <textarea
                     placeholder="Baju wanita muslim dengan bahan katun."
@@ -216,13 +220,16 @@ export default function CreateProduct() {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price</FormLabel>
+                <FormLabel>Harga</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     {...field}
                     placeholder="1"
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(Number(e.target.value) || 0)
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -235,13 +242,16 @@ export default function CreateProduct() {
             name="stock"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Stock</FormLabel>
+                <FormLabel>Stok</FormLabel>
                 <FormControl>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     {...field}
                     placeholder="1"
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(Number(e.target.value) || 0)
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -254,7 +264,7 @@ export default function CreateProduct() {
             name="size"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Size</FormLabel>
+                <FormLabel className="text-base">Ukuran</FormLabel>
                 <div className="flex flex-wrap gap-4">
                   {items.map((item) => (
                     <FormItem
