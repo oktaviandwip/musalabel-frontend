@@ -222,7 +222,7 @@ export default function Details() {
   return (
     <>
       <Header />
-      <div className="flex flex-col sm:flex-row p-4 pt-20 min-h-screen">
+      <div className="container flex flex-col sm:flex-row p-4 pt-20 min-h-screen">
         {/* Carousel for Product Images */}
         <Carousel className="sm:w-1/3">
           <CarouselContent>
