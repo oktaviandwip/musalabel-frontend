@@ -206,7 +206,8 @@ export default function Details() {
       dispatch(setOrders([selectedItem]));
       router.push("/products/checkout");
     } else {
-      console.error("No size selected");
+      handleToast("error", "Pilih ukuran yang diinginkan");
+      console.error("Pilih ukuran yang diinginkan");
     }
   };
 

@@ -18,7 +18,11 @@ import { useRouter } from "next/navigation";
 import { clearSelectedItems, setOrders } from "@/store/reducer/order";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
-import { updateAddress, updatePhoneNumber } from "@/store/reducer/user";
+import {
+  updateAddress,
+  updatePhoneNumber,
+  updateName,
+} from "@/store/reducer/user";
 import {
   Select,
   SelectContent,
@@ -43,6 +47,9 @@ export default function Checkout() {
   const [localPhoneNumber, setLocalPhoneNumber] = useState(
     profile?.Phone_number || ""
   );
+  const [localName, setLocalName] = useState(profile?.Full_name || "");
+
+  const [isNameOpen, setIsNameOpen] = useState(false);
   const [isPhoneOpen, setIsPhoneOpen] = useState(false);
   const [isAddressOpen, setIsAddressOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<null | AddressKey>(null);
@@ -96,8 +103,8 @@ export default function Checkout() {
   };
 
   const handlePayment = async () => {
-    if (!profile?.Phone_number || !selectedAddress) {
-      handleToast("error", "No. Telp dan Alamat tidak boleh kosong.");
+    if (!profile?.Full_name || !profile?.Phone_number || !selectedAddress) {
+      handleToast("error", "Nama, No. Telp, dan Alamat tidak boleh kosong.");
       return;
     }
 
@@ -184,10 +191,64 @@ export default function Checkout() {
     setEditingAddress(addressKey);
   };
 
+  const handleSaveName = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users/checkout-user`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: profile?.Id,
+            full_name: localName,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        dispatch(updateName(localName));
+        setIsNameOpen(false);
+      } else {
+        console.error("Failed to update name");
+      }
+    } catch (error) {
+      console.error("Failed to update name:", error);
+    }
+  };
+
+  const handleSavePhone = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users/checkout-user`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: profile?.Id,
+            Phone_number: localPhoneNumber,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        dispatch(updatePhoneNumber(localPhoneNumber));
+        setIsPhoneOpen(false);
+      } else {
+        console.error("Failed to update phone number");
+      }
+    } catch (error) {
+      console.error("Failed to update phone number:", error);
+    }
+  };
+
   const handleSaveAddress = async (addressKey: AddressKey) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/users/phone-address`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users/checkout-user`,
         {
           method: "PATCH",
           headers: {
@@ -224,33 +285,6 @@ export default function Checkout() {
     });
   };
 
-  const handleSavePhone = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/users/phone-address`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: profile?.Id,
-            Phone_number: localPhoneNumber,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        dispatch(updatePhoneNumber(localPhoneNumber));
-        setIsPhoneOpen(false);
-      } else {
-        console.error("Failed to update phone number");
-      }
-    } catch (error) {
-      console.error("Failed to update phone number:", error);
-    }
-  };
-
   const formatCurreny = (price: number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -272,7 +306,12 @@ export default function Checkout() {
           <>
             <Card className="p-4 space-y-2">
               <h2 className="text-xl font-bold">Detail Pembeli</h2>
-              <p className="py-2">Nama: {profile?.Full_name}</p>
+              <div className="flex items-center justify-between">
+                <p>Nama: {profile?.Full_name}</p>
+                <Button variant="secondary" onClick={() => setIsNameOpen(true)}>
+                  Ubah
+                </Button>
+              </div>
               <div className="flex items-center justify-between">
                 <p>No. Telp: {profile?.Phone_number}</p>
                 <Button
@@ -366,11 +405,56 @@ export default function Checkout() {
           </>
         )}
       </div>
-
       <Footer />
 
+      <Dialog open={isNameOpen} onOpenChange={setIsNameOpen}>
+        <DialogContent className="w-[350px] sm:w-[425px] rounded-lg">
+          <DialogTitle>Ganti Nama</DialogTitle>
+          <DialogDescription>
+            Masukkan nama baru atau edit yang sudah ada
+          </DialogDescription>
+          <div className="space-y-4">
+            <div className="flex space-x-2 mt-1">
+              <Input
+                value={localName}
+                onChange={(e) => setLocalName(e.target.value)}
+                className="flex-1"
+              />
+              <Button onClick={handleSaveName}>Simpan</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPhoneOpen} onOpenChange={setIsPhoneOpen}>
+        <DialogContent className="w-[350px] sm:w-[425px] rounded-lg">
+          <DialogTitle>Ganti No. Telp</DialogTitle>
+          <DialogDescription>
+            Masukkan no. telp baru atau edit yang ada
+          </DialogDescription>
+          <div className="space-y-4">
+            <div className="flex space-x-2 mt-1">
+              <Input
+                type="text"
+                inputMode="numeric"
+                value={localPhoneNumber}
+                onChange={(e) =>
+                  setLocalPhoneNumber(
+                    String(Number(e.target.value)) === "NaN"
+                      ? ""
+                      : e.target.value
+                  )
+                }
+                className="flex-1"
+              />
+              <Button onClick={handleSavePhone}>Simpan</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={isAddressOpen} onOpenChange={setIsAddressOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="w-[350px] sm:w-[425px] rounded-lg">
           <DialogTitle>Ganti Alamat</DialogTitle>
           <DialogDescription>
             Pilih atau edit alamat yang sudah ada
@@ -417,25 +501,6 @@ export default function Checkout() {
                 </div>
               )
             )}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isPhoneOpen} onOpenChange={setIsPhoneOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogTitle>Ganti No. Telp</DialogTitle>
-          <DialogDescription>
-            Masukkan no. telp baru atau edit yang sudah ada
-          </DialogDescription>
-          <div className="space-y-4">
-            <div className="flex space-x-2 mt-1">
-              <Input
-                value={localPhoneNumber}
-                onChange={(e) => setLocalPhoneNumber(e.target.value)}
-                className="flex-1"
-              />
-              <Button onClick={handleSavePhone}>Simpan</Button>
-            </div>
           </div>
         </DialogContent>
       </Dialog>

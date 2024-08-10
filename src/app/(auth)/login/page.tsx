@@ -152,7 +152,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-    console.log(data);
     if (data.isGoogle) {
       handleSubmit();
     }
