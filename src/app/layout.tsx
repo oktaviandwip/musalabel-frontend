@@ -1,6 +1,6 @@
 import { StoreProvider } from "@/store/StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/components/providers/Providers";
+import Providers from "@/components/Providers";
 import type { Metadata } from "next";
 import "./globals.css";
 

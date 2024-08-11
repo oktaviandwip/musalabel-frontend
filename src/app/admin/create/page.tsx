@@ -18,6 +18,9 @@ import { Input } from "@/components/ui/input";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/Loading";
+import { toast } from "@/components/ui/use-toast";
+import Header from "@/components/Header";
 
 // Define the size options
 const items = [
@@ -71,6 +74,18 @@ export default function CreateProduct() {
 
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 md:w-96 md:mx-auto p-4 border-none rounded-none`,
+    });
+  };
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files ? Array.from(e.target.files) : [];
@@ -119,186 +134,214 @@ export default function CreateProduct() {
       });
 
       if (res.ok) {
-        console.log("Success");
         router.push("/admin");
       } else {
         const error = await res.json();
-        console.error("Failed to submit the form:", error.message);
+        setIsLoading(false);
+        console.error("Failed to submit the form:", error.description);
+        if (error.description.includes("unique_slug")) {
+          handleToast("error", "Nama produk sudah ada");
+        } else {
+          handleToast("error", error.description);
+        }
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error occurred during submission:", error);
+      handleToast("error", String(error));
     }
   }
 
   return (
-    <div className="pt-24">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex flex-wrap gap-4">
-            {selectedImages.map((src, index) => (
-              <div key={index} className="relative w-32 h-48 group">
-                <Image
-                  src={src}
-                  alt={`Selected image ${index + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute top-1 right-1 hidden group-hover:flex justify-center items-center bg-black bg-opacity-30 text-white rounded-full size-6"
-                >
-                  <DeleteIcon style={{ fontSize: 15 }} />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <FormField
-            control={form.control}
-            name="image"
-            render={() => (
-              <FormItem className="relative">
-                <FormLabel>Foto</FormLabel>
-                <FormControl>
-                  <Input readOnly placeholder="Pilih foto" />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    multiple
-                    key={fileInputKey}
-                    type="file"
-                    accept="image/jpeg, image/png"
-                    onChange={handleFileChange}
-                    className="opacity-0 absolute top-6"
+    <>
+      <div className={`${isLoading ? "absolute" : "hidden"}`}>
+        <Loading />
+      </div>
+      <Header />
+      <div className="container py-24">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              {selectedImages.map((src, index) => (
+                <div key={index} className="relative w-32 h-48 group">
+                  <Image
+                    src={src}
+                    alt={`Selected image ${index + 1}`}
+                    layout="fill"
+                    objectFit="cover"
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="button" onClick={resetImages} variant="secondary">
-            Reset Foto
-          </Button>
-
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nama</FormLabel>
-                <FormControl>
-                  <Input placeholder="Basic Dress Asma" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Deskripsi</FormLabel>
-                <FormControl>
-                  <textarea
-                    placeholder="Baju wanita muslim dengan bahan katun."
-                    {...field}
-                    rows={4}
-                    className="w-full border-2 border-secondary rounded-xl p-2"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Harga</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    {...field}
-                    placeholder="1"
-                    onChange={(e) =>
-                      field.onChange(Number(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="stock"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Stok</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    inputMode="numeric"
-                    {...field}
-                    placeholder="1"
-                    onChange={(e) =>
-                      field.onChange(Number(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="size"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Ukuran</FormLabel>
-                <div className="flex flex-wrap gap-4">
-                  {items.map((item) => (
-                    <FormItem
-                      key={item.id}
-                      className="flex items-start space-x-3 space-y-0"
-                    >
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value.includes(item.id)}
-                          onCheckedChange={(checked) => {
-                            const newValue = checked
-                              ? [...field.value, item.id]
-                              : field.value.filter(
-                                  (value) => value !== item.id
-                                );
-                            field.onChange(newValue);
-                          }}
-                          className="border border-gray-300"
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        {item.label}
-                      </FormLabel>
-                    </FormItem>
-                  ))}
-                  <FormMessage />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 hidden group-hover:flex justify-center items-center bg-black bg-opacity-30 text-white rounded-full size-6"
+                  >
+                    <DeleteIcon style={{ fontSize: 15 }} />
+                  </button>
                 </div>
-              </FormItem>
-            )}
-          />
+              ))}
+            </div>
 
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
-    </div>
+            <FormField
+              control={form.control}
+              name="image"
+              render={() => (
+                <FormItem className="relative">
+                  <FormLabel>Foto</FormLabel>
+                  <FormControl>
+                    <Input readOnly placeholder="Pilih foto" />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      multiple
+                      key={fileInputKey}
+                      type="file"
+                      accept="image/jpeg, image/png"
+                      onChange={handleFileChange}
+                      className="opacity-0 absolute top-6"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="button" onClick={resetImages} variant="secondary">
+              Reset Foto
+            </Button>
+
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Basic Dress Asma" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Deskripsi</FormLabel>
+                  <FormControl>
+                    <textarea
+                      placeholder="Baju wanita muslim dengan bahan katun."
+                      {...field}
+                      rows={4}
+                      className="w-full border-2 border-secondary rounded-xl p-2"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Harga</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      placeholder="1"
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="stock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stok</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      placeholder="1"
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Ukuran</FormLabel>
+                  <div className="flex flex-wrap gap-4">
+                    {items.map((item) => (
+                      <FormItem
+                        key={item.id}
+                        className="flex items-start space-x-3 space-y-0"
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value.includes(item.id)}
+                            onCheckedChange={(checked) => {
+                              const newValue = checked
+                                ? [...field.value, item.id]
+                                : field.value.filter(
+                                    (value) => value !== item.id
+                                  );
+                              field.onChange(newValue);
+                            }}
+                            className="border border-gray-300"
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          {item.label}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-between md:justify-start space-x-4 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/admin")}
+                className="w-1/2 md:w-24"
+              >
+                Kembali
+              </Button>
+              <Button
+                type="submit"
+                onClick={() => setIsLoading(true)}
+                className="w-1/2 md:w-24"
+              >
+                Simpan
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 }

@@ -96,11 +96,11 @@ export default function Component() {
           className="mb-4 flex justify-center items-center"
         >
           <RadioGroupItem value="daily" id="daily" />
-          <label htmlFor="daily" className="mr-8">
+          <label htmlFor="daily" className="mr-4 md:mr-8">
             Harian
           </label>
           <RadioGroupItem value="weekly" id="weekly" />
-          <label htmlFor="weekly" className="mr-8">
+          <label htmlFor="weekly" className="mr-4 md:mr-8">
             Mingguan
           </label>
           <RadioGroupItem value="monthly" id="monthly" />
@@ -142,7 +142,7 @@ export default function Component() {
         </ChartContainer>
       </div>
 
-      <div className="pt-24">
+      <div className="pt-12 md:pt-16">
         <h1 className="text-center font-semibold mb-8">Total Penjualan</h1>
         <RadioGroup
           value={quantityInterval}
@@ -150,15 +150,15 @@ export default function Component() {
           className="mb-4 flex justify-center items-center"
         >
           <RadioGroupItem value="week" id="week" />
-          <label htmlFor="week" className="mr-8">
-            1 Minggu
+          <label htmlFor="week" className="mr-4 md:mr-8">
+            Minggu
           </label>
           <RadioGroupItem value="month" id="month" />
-          <label htmlFor="month" className="mr-8">
-            1 Bulan
+          <label htmlFor="month" className="mr-4 md:mr-8">
+            Bulan
           </label>
           <RadioGroupItem value="year" id="year" />
-          <label htmlFor="year">1 Tahun</label>
+          <label htmlFor="year">Tahun</label>
         </RadioGroup>
 
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

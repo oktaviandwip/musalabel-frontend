@@ -15,9 +15,10 @@ import { Button } from "@/components/ui/button";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Pagination from "@/components/pagination/Pagination";
+import Pagination from "@/components/Pagination";
 import { Input } from "@/components/ui/input";
 import { Icon } from "@iconify/react";
+import Header from "@/components/Header";
 
 interface Model {
   Id: string;
@@ -112,93 +113,96 @@ export default function Admin() {
   });
 
   return (
-    <div className="pt-24">
-      <div className="flex justify-between my-4">
-        <div className="relative">
-          <Icon
-            icon="mage:search"
-            className="absolute size-5 top-[10px] left-2 opacity-50"
-            onClick={searchData}
-          />
-          <Input
-            type="search"
-            className="pl-10 w-44 sm:w-64"
-            placeholder="Hasfshah"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+    <>
+      <Header />
+      <div className="container pt-24">
+        <div className="flex justify-between my-4">
+          <div className="relative">
+            <Icon
+              icon="mage:search"
+              className="absolute size-5 top-[10px] left-2 opacity-50"
+              onClick={searchData}
+            />
+            <Input
+              type="search"
+              className="pl-10 w-44 sm:w-64"
+              placeholder="Hasfshah"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <Button>
+            <Link href="/admin/create">Add Product</Link>
+          </Button>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-center">No.</TableHead>
+              <TableHead className="text-center">Image</TableHead>
+              <TableHead className="text-center">Model</TableHead>
+              <TableHead className="text-center">Price</TableHead>
+              <TableHead className="text-center">Stock</TableHead>
+              <TableHead className="text-center">Size</TableHead>
+              <TableHead className="text-center">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data &&
+              data.map((model: Model, index) => {
+                const imageUrls = model.Image.split(",");
+                return (
+                  <TableRow key={model.Id} className="text-center">
+                    <TableCell>
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </TableCell>
+                    <TableCell className="flex justify-center">
+                      <Image
+                        src={imageUrls[0]}
+                        alt={model.Name}
+                        width={50}
+                        height={50}
+                      />
+                    </TableCell>
+                    <TableCell>{model.Name}</TableCell>
+                    <TableCell>{formatter.format(model.Price)}</TableCell>
+                    <TableCell>{model.Stock}</TableCell>
+                    <TableCell>{model.Size}</TableCell>
+                    <TableCell>
+                      <div className="flex justify-center text-white gap-x-4">
+                        <Button className="size-10 bg-primary rounded-lg hover:bg-white hover:text-primary">
+                          <Link href={`/admin/edit/${model.Id}`}>
+                            <EditIcon />
+                          </Link>
+                        </Button>
+                        <Button className="size-10 bg-secondary rounded-lg text-primary hover:text-white">
+                          <Link href={`/products/${model.Slug}`}>
+                            <VisibilityIcon />
+                          </Link>
+                        </Button>
+                        <Button
+                          className="size-10 bg-destructive rounded-lg"
+                          onClick={() => handleDelete(model.Id)}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+        <div className={totalPages <= 1 ? "hidden" : "flex mt-4"}>
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            maxPages={maxPages}
           />
         </div>
-
-        <Button>
-          <Link href="/admin/create">Add Product</Link>
-        </Button>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-center">No.</TableHead>
-            <TableHead className="text-center">Image</TableHead>
-            <TableHead className="text-center">Model</TableHead>
-            <TableHead className="text-center">Price</TableHead>
-            <TableHead className="text-center">Stock</TableHead>
-            <TableHead className="text-center">Size</TableHead>
-            <TableHead className="text-center">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data &&
-            data.map((model: Model, index) => {
-              const imageUrls = model.Image.split(",");
-              return (
-                <TableRow key={model.Id} className="text-center">
-                  <TableCell>
-                    {(currentPage - 1) * itemsPerPage + index + 1}
-                  </TableCell>
-                  <TableCell className="flex justify-center">
-                    <Image
-                      src={imageUrls[0]}
-                      alt={model.Name}
-                      width={50}
-                      height={50}
-                    />
-                  </TableCell>
-                  <TableCell>{model.Name}</TableCell>
-                  <TableCell>{formatter.format(model.Price)}</TableCell>
-                  <TableCell>{model.Stock}</TableCell>
-                  <TableCell>{model.Size}</TableCell>
-                  <TableCell>
-                    <div className="flex justify-center text-white gap-x-4">
-                      <Button className="size-10 bg-primary rounded-lg hover:bg-white hover:text-primary">
-                        <Link href={`/admin/edit/${model.Id}`}>
-                          <EditIcon />
-                        </Link>
-                      </Button>
-                      <Button className="size-10 bg-secondary rounded-lg text-primary hover:text-white">
-                        <Link href={`/products/${model.Slug}`}>
-                          <VisibilityIcon />
-                        </Link>
-                      </Button>
-                      <Button
-                        className="size-10 bg-destructive rounded-lg"
-                        onClick={() => handleDelete(model.Id)}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
-      <div className={totalPages <= 1 ? "hidden" : "flex mt-4"}>
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          maxPages={maxPages}
-        />
-      </div>
-    </div>
+    </>
   );
 }

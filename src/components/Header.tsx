@@ -291,25 +291,44 @@ export default function Header() {
                   <Button
                     variant={"secondary"}
                     className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    onClick={() =>
+                    onClick={() => {
+                      setSidebarOpen(false);
                       router.push(
                         profile?.Role === "admin" ? "/admin" : "/profile"
-                      )
-                    }
+                      );
+                    }}
                   >
                     {profile?.Role === "admin" ? "Admin" : "Akun"}
                   </Button>
                   <Button
                     variant={"secondary"}
+                    className={`${
+                      profile?.Role === "admin" ? "flex" : "hidden"
+                    } w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors`}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      router.push("/admin/dashboard");
+                    }}
+                  >
+                    Dashboard
+                  </Button>
+                  <Button
+                    variant={"secondary"}
                     className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    onClick={() => router.push("/products/cart")}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      router.push("/products/cart");
+                    }}
                   >
                     Keranjang
                   </Button>
                   <Button
                     variant={"secondary"}
                     className="w-full text-center py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    onClick={() => router.push("/products/orders")}
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      router.push("/products/orders");
+                    }}
                   >
                     Pesanan
                   </Button>

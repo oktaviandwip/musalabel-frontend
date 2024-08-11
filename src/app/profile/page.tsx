@@ -32,7 +32,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/store";
 import { getProfile } from "@/store/reducer/user";
-import Header from "@/components/header/Header";
+import Header from "@/components/Header";
 import {
   Dialog,
   DialogTrigger,

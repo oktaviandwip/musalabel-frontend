@@ -3,8 +3,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import CartItems from "./CartItems";
 import type { RootState } from "@/store";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";

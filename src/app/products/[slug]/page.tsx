@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import ProductDetails from "./SlugClient";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 interface ProductData {
   Id: string;

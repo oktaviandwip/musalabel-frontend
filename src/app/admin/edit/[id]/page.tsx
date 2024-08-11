@@ -18,6 +18,9 @@ import { Input } from "@/components/ui/input";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Loading from "@/components/Loading";
+import { toast } from "@/components/ui/use-toast";
 
 // Define the size options
 const items = [
@@ -82,6 +85,18 @@ export default function EditProduct({
 
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleToast = (type: "success" | "error", desc: string) => {
+    toast({
+      description: desc,
+      className: `${
+        type === "success"
+          ? "bg-secondary text-primary"
+          : "bg-destructive text-white"
+      } fixed top-0 flex items-center justify-center inset-x-0 md:w-96 md:mx-auto p-4 border-none rounded-none`,
+    });
+  };
 
   useEffect(() => {
     async function fetchProduct() {
@@ -161,188 +176,217 @@ export default function EditProduct({
     formData.append("price", values.price.toString());
     formData.append("size", values.size.join(","));
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.id}`,
-      {
-        method: "PATCH",
-        body: formData,
-      }
-    );
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/products/${params.id}`,
+        {
+          method: "PATCH",
+          body: formData,
+        }
+      );
 
-    if (res.status === 201) {
-      router.push("/admin");
-    } else {
-      console.error("Failed to submit the form");
+      if (res.status === 201) {
+        router.push("/admin");
+      } else {
+        const error = await res.json();
+        setIsLoading(false);
+        console.error("Failed to submit the form:", error.description);
+        if (error.description.includes("unique_slug")) {
+          handleToast("error", "Nama produk sudah ada");
+        } else {
+          handleToast("error", error.description);
+        }
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error occurred during submission:", error);
+      handleToast("error", String(error));
     }
   }
 
   return (
-    <div className="pt-24">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex flex-wrap gap-4">
-            {selectedImages.map((src, index) => (
-              <div key={index} className="relative w-32 h-48 group">
-                <Image
-                  src={src}
-                  alt={`Selected image ${index + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute top-1 right-1 hidden group-hover:flex justify-center items-center bg-black bg-opacity-30 text-white rounded-full w-6 h-6"
-                >
-                  <DeleteIcon style={{ fontSize: 15 }} />
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <FormField
-            name="images"
-            render={() => (
-              <FormItem className="relative">
-                <FormLabel>Images</FormLabel>
-                <FormControl>
-                  <Input readOnly placeholder="Choose Images" />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    multiple
-                    key={fileInputKey}
-                    type="file"
-                    accept="image/jpeg, image/png"
-                    onChange={handleFileChange}
-                    className="opacity-0 absolute top-6"
+    <>
+      <div className={`${isLoading ? "absolute" : "hidden"}`}>
+        <Loading />
+      </div>
+      <Header />
+      <div className="container py-24">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              {selectedImages.map((src, index) => (
+                <div key={index} className="relative w-32 h-48 group">
+                  <Image
+                    src={src}
+                    alt={`Selected image ${index + 1}`}
+                    layout="fill"
+                    objectFit="cover"
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="button" onClick={resetImages} variant="secondary">
-            Reset Images
-          </Button>
-
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Basic Dress Asma" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <textarea
-                    placeholder="Baju wanita muslim dengan bahan katun."
-                    {...field}
-                    rows={4} // Adjust the number of rows as needed
-                    className="w-full border-2 border-secondary rounded-xl p-2"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(Number(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="stock"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Stock</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(Number(e.target.value) || 0)
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="size"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Size</FormLabel>
-                <div className="flex flex-wrap gap-4">
-                  {items.map((item) => (
-                    <FormItem
-                      key={item.id}
-                      className="flex items-center space-x-2"
-                    >
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(item.id)}
-                          onCheckedChange={(checked) => {
-                            const newValue = checked
-                              ? [...(field.value || []), item.id]
-                              : field.value?.filter(
-                                  (value) => value !== item.id
-                                );
-                            field.onChange(newValue);
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="leading-none">
-                        {item.label}
-                      </FormLabel>
-                    </FormItem>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 hidden group-hover:flex justify-center items-center bg-black bg-opacity-30 text-white rounded-full w-6 h-6"
+                  >
+                    <DeleteIcon style={{ fontSize: 15 }} />
+                  </button>
                 </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              ))}
+            </div>
 
-          <div className="space-x-4">
-            <Button variant="secondary" onClick={() => router.push("/admin")}>
-              Batalkan
+            <FormField
+              name="images"
+              render={() => (
+                <FormItem className="relative">
+                  <FormLabel>Images</FormLabel>
+                  <FormControl>
+                    <Input readOnly placeholder="Choose Images" />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      multiple
+                      key={fileInputKey}
+                      type="file"
+                      accept="image/jpeg, image/png"
+                      onChange={handleFileChange}
+                      className="opacity-0 absolute top-6"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="button" onClick={resetImages} variant="secondary">
+              Reset Images
             </Button>
-            <Button type="submit">Simpan</Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Basic Dress Asma" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <textarea
+                      placeholder="Baju wanita muslim dengan bahan katun."
+                      {...field}
+                      rows={4} // Adjust the number of rows as needed
+                      className="w-full border-2 border-secondary rounded-xl p-2"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="stock"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stock</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value) || 0)
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <div className="flex flex-wrap gap-4">
+                    {items.map((item) => (
+                      <FormItem
+                        key={item.id}
+                        className="flex items-center space-x-2"
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value?.includes(item.id)}
+                            onCheckedChange={(checked) => {
+                              const newValue = checked
+                                ? [...(field.value || []), item.id]
+                                : field.value?.filter(
+                                    (value) => value !== item.id
+                                  );
+                              field.onChange(newValue);
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="leading-none">
+                          {item.label}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-between md:justify-start space-x-4 pt-4">
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/admin")}
+                className="w-1/2 md:w-24"
+              >
+                Batalkan
+              </Button>
+              <Button
+                type="submit"
+                onClick={() => setIsLoading(true)}
+                className="w-1/2 md:w-24"
+              >
+                Simpan
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 }
