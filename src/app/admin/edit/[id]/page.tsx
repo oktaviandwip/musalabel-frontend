@@ -118,12 +118,15 @@ export default function EditProduct({
             })
           );
 
-          form.setValue("image", imageFiles);
-          form.setValue("name", data.Name);
-          form.setValue("description", data.Description);
-          form.setValue("stock", data.Stock);
-          form.setValue("price", data.Price);
-          form.setValue("size", data.Size.split(","));
+          // Set form values with fetched data
+          form.reset({
+            image: imageFiles,
+            name: data.Name,
+            description: data.Description,
+            stock: data.Stock,
+            price: data.Price,
+            size: data.Size.split(","),
+          });
         } else {
           console.error("Failed to fetch the product data");
         }
