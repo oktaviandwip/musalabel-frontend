@@ -118,15 +118,14 @@ export default function EditProduct({
             })
           );
 
-          // Set form values with fetched data
-          form.reset({
-            image: imageFiles,
-            name: data.Name,
-            description: data.Description,
-            stock: data.Stock,
-            price: data.Price,
-            size: data.Size.split(","),
-          });
+          // Use setValue to update form values individually
+          console.log(data);
+          form.setValue("image", imageFiles);
+          form.setValue("name", data.Name);
+          form.setValue("description", data.Description);
+          form.setValue("stock", data.Stock);
+          form.setValue("price", data.Price);
+          form.setValue("size", data.Size.split(","));
         } else {
           console.error("Failed to fetch the product data");
         }
@@ -218,7 +217,7 @@ export default function EditProduct({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-wrap gap-4">
               {selectedImages.map((src, index) => (
-                <div key={index} className="relative w-32 h-48 group">
+                <div key={src} className="relative w-32 h-48 group">
                   <Image
                     src={src}
                     alt={`Selected image ${index + 1}`}
@@ -342,7 +341,7 @@ export default function EditProduct({
                 <FormItem>
                   <FormLabel>Size</FormLabel>
                   <div className="flex flex-wrap gap-4">
-                    {items.map((item) => (
+                    {items.map((item, index) => (
                       <FormItem
                         key={item.id}
                         className="flex items-center space-x-2"
