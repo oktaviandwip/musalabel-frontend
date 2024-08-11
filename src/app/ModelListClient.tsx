@@ -44,6 +44,7 @@ const ModelListClient: React.FC<ModelListClientProps> = ({ models }) => {
             key={model.Id}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
+            onClick={() => router.push(`/products/${model.Slug}`)}
           >
             <CardHeader className="relative group">
               <Image
@@ -51,7 +52,6 @@ const ModelListClient: React.FC<ModelListClientProps> = ({ models }) => {
                 alt="Image"
                 width={250}
                 height={250}
-                onClick={() => router.push(`/products/${model.Slug}`)}
               />
             </CardHeader>
             <CardContent className="space-y-1">
