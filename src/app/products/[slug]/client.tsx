@@ -1,19 +1,9 @@
-// client.tsx (Client Component)
+// Client.tsx
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addItemToCart,
@@ -57,21 +47,18 @@ export default function ProductDetails({ data }: { data: ProductData }) {
   const { profile } = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
-  // Increase Quantity
   const increaseQuantity = () => {
     if (quantity < data.Stock) {
       setQuantity(quantity + 1);
     }
   };
 
-  // Decrease Quantity
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   };
 
-  // Handle Add to Cart
   const handleAddToCart = async () => {
     if (selectedSize) {
       const orderData = {
@@ -88,7 +75,6 @@ export default function ProductDetails({ data }: { data: ProductData }) {
         );
 
         if (existingItemIndex !== -1) {
-          // Update quantity of existing item
           const updatedItem = {
             ...items[existingItemIndex],
             Quantity: items[existingItemIndex].Quantity + quantity,
@@ -153,7 +139,6 @@ export default function ProductDetails({ data }: { data: ProductData }) {
     }
   };
 
-  // Handle Buy Now
   const handleBuyNow = () => {
     if (selectedSize) {
       const selectedItem = {
@@ -178,108 +163,70 @@ export default function ProductDetails({ data }: { data: ProductData }) {
     }
   };
 
-  // Price Format
-  const formatter = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  });
-
   return (
-    <>
-      <Header />
-      <div className="container flex flex-col sm:flex-row p-4 pt-20 min-h-screen mb-10">
-        {/* Carousel for Product Images */}
-        <Carousel className="sm:w-1/3">
-          <CarouselContent>
-            {data.Image.map((url, i) => (
-              <CarouselItem key={i}>
-                <Image
-                  src={url}
-                  alt={`Product Image ${i + 1}`}
-                  width={800}
-                  height={600}
-                  className="w-full h-auto"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-
-        {/* Product Details */}
-        <div className="sm:w-2/3 p-4 sm:ml-10 text-justify sm:text-left mt-10">
-          <h1 className="text-2xl font-bold mb-2">{data.Name}</h1>
-          <p className="mb-4 text-primary">{data.Description}</p>
-          <h1 className="text-destructive">{formatter.format(data.Price)}</h1>
-          <p className="mb-4 text-gray-400">Stok: {data.Stock}</p>
-
-          {/* Size Selection */}
-          <div className="mb-4">
-            <div className="mb-2">Ukuran</div>
-            <div className="flex gap-2">
-              {data.Size.map((s) => (
-                <Button
-                  key={s}
-                  onClick={() => setSelectedSize(s)}
-                  className={`${
-                    selectedSize === s
-                      ? "bg-primary text-white hover:text-white"
-                      : "bg-secondary text-primary hover:text-white"
-                  }`}
-                >
-                  {s}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Quantity Adjustment */}
-          <div className="flex items-center mb-4 space-x-9">
-            <p>Jumlah</p>
-            <div>
-              <Button
-                onClick={decreaseQuantity}
-                variant="secondary"
-                className="size-8 text-xl rounded-none"
-              >
-                -
-              </Button>
-              <input
-                type="text"
-                value={quantity}
-                readOnly
-                className="text-center w-12 h-8 border-2 border-secondary pt-[2px]"
-              />
-              <Button
-                onClick={increaseQuantity}
-                variant="secondary"
-                className="size-8 text-xl rounded-none"
-              >
-                +
-              </Button>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-2">
+    <div>
+      {/* Size Selection */}
+      <div className="mb-4">
+        <div className="mb-2">Ukuran</div>
+        <div className="flex gap-2">
+          {data.Size.map((s) => (
             <Button
-              onClick={handleAddToCart}
-              className="bg-primary text-white px-4 py-2 rounded"
+              key={s}
+              onClick={() => setSelectedSize(s)}
+              className={`${
+                selectedSize === s
+                  ? "bg-primary text-white hover:text-white"
+                  : "bg-secondary text-primary hover:text-white"
+              }`}
             >
-              <span className="hidden sm:flex">Tambah ke&nbsp;</span>Keranjang
+              {s}
             </Button>
-            <Button
-              onClick={handleBuyNow}
-              className="bg-gradient text-white px-4 py-2 rounded hover:bg-destructive hover:opacity-95"
-            >
-              Beli Sekarang
-            </Button>
-          </div>
+          ))}
         </div>
       </div>
-      <Footer />
-    </>
+
+      {/* Quantity Adjustment */}
+      <div className="flex items-center mb-4 space-x-9">
+        <p>Jumlah</p>
+        <div>
+          <Button
+            onClick={decreaseQuantity}
+            variant="secondary"
+            className="size-8 text-xl rounded-none"
+          >
+            -
+          </Button>
+          <input
+            type="text"
+            value={quantity}
+            readOnly
+            className="text-center w-12 h-8 border-2 border-secondary pt-[2px]"
+          />
+          <Button
+            onClick={increaseQuantity}
+            variant="secondary"
+            className="size-8 text-xl rounded-none"
+          >
+            +
+          </Button>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex gap-2">
+        <Button
+          onClick={handleAddToCart}
+          className="bg-primary text-white px-4 py-2 rounded"
+        >
+          <span className="hidden sm:flex">Tambah ke&nbsp;</span>Keranjang
+        </Button>
+        <Button
+          onClick={handleBuyNow}
+          className="bg-gradient text-white px-4 py-2 rounded hover:bg-destructive hover:opacity-95"
+        >
+          Beli Sekarang
+        </Button>
+      </div>
+    </div>
   );
 }
