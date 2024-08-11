@@ -179,7 +179,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-10 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-10 pb-10">
       <Link href="/">
         <Image src={icon} alt="Musalabel icon" height={70} />
       </Link>
