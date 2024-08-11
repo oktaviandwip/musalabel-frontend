@@ -1,12 +1,12 @@
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import Server from "./Server";
+import SlugServer from "./SlugServer";
 
 export default function page({ params }: { params: { slug: string } }) {
   return (
     <>
       <Header />
-      <Server params={params} />
+      <SlugServer params={params} />
       <Footer />
     </>
   );

@@ -6,7 +6,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import ProductDetails from "./Client";
+import ProductDetails from "./SlugClient";
 
 interface ProductData {
   Id: string;
