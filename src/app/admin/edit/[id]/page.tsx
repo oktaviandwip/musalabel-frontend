@@ -119,7 +119,6 @@ export default function EditProduct({
           );
 
           // Use setValue to update form values individually
-          console.log(data);
           form.setValue("image", imageFiles);
           form.setValue("name", data.Name);
           form.setValue("description", data.Description);
