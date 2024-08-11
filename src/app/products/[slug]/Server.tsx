@@ -81,7 +81,6 @@ export default async function Server({ params }: { params: { slug: string } }) {
         <h1 className="text-destructive">{formatter.format(data.Price)}</h1>
         <p className="mb-4 text-gray-400">Stok: {data.Stock}</p>
 
-        {/* Render Size Selection and Quantity Adjustment */}
         <ProductDetails data={data} />
       </div>
     </div>
