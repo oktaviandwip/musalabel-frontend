@@ -1,0 +1,285 @@
+// client.tsx (Client Component)
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addItemToCart,
+  updateItemInCart,
+  setOrders,
+} from "@/store/reducer/order";
+import { RootState } from "@/store";
+import { toast } from "@/components/ui/use-toast";
+
+type ProductData = {
+  Id: string;
+  Name: string;
+  Slug: string;
+  Description: string;
+  Price: number;
+  Image: string[];
+  Stock: number;
+  Size: string[];
+  Created_at: string;
+  Updated_at: string | null;
+};
+
+const handleToast = (type: "success" | "error", desc: string) => {
+  toast({
+    description: desc,
+    className: `${
+      type === "success"
+        ? "bg-secondary text-primary"
+        : "bg-destructive text-white"
+    } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+  });
+};
+
+export default function ProductDetails({ data }: { data: ProductData }) {
+  const dispatch = useDispatch();
+
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+  const { items } = useSelector((state: RootState) => state.order);
+  const { profile } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
+
+  // Increase Quantity
+  const increaseQuantity = () => {
+    if (quantity < data.Stock) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  // Decrease Quantity
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  // Handle Add to Cart
+  const handleAddToCart = async () => {
+    if (selectedSize) {
+      const orderData = {
+        user_id: profile?.Id,
+        product_id: data.Id,
+        quantity,
+        size: selectedSize,
+        status: "cart",
+      };
+
+      try {
+        const existingItemIndex = items.findIndex(
+          (item) => item.Product_id === data.Id && item.Size === selectedSize
+        );
+
+        if (existingItemIndex !== -1) {
+          // Update quantity of existing item
+          const updatedItem = {
+            ...items[existingItemIndex],
+            Quantity: items[existingItemIndex].Quantity + quantity,
+          };
+
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/orders/`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedItem),
+            }
+          );
+
+          if (res.ok) {
+            dispatch(updateItemInCart(updatedItem));
+          } else {
+            console.error("Failed to update item in cart");
+          }
+        } else {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/orders/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderData),
+            }
+          );
+
+          if (res.ok) {
+            const result = await res.json();
+            dispatch(
+              addItemToCart({
+                Id: result.data.Id,
+                Product_id: data.Id,
+                User_id: profile?.Id,
+                Quantity: quantity,
+                Size: selectedSize,
+                Name: data.Name,
+                Slug: data.Slug,
+                Description: data.Description,
+                Price: data.Price,
+                Image: data.Image[0],
+                Stock: data.Stock,
+                Created_at: data.Created_at,
+                Updated_at: data.Updated_at,
+              })
+            );
+          } else {
+            console.error("Failed to add order to cart");
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      handleToast("error", "Pilih ukuran yang diinginkan");
+    }
+  };
+
+  // Handle Buy Now
+  const handleBuyNow = () => {
+    if (selectedSize) {
+      const selectedItem = {
+        Id: "",
+        Product_id: data.Id,
+        User_id: profile?.Id,
+        Quantity: quantity,
+        Size: selectedSize,
+        Name: data.Name,
+        Slug: data.Slug,
+        Description: data.Description,
+        Price: data.Price,
+        Image: data.Image[0],
+        Stock: data.Stock,
+        Created_at: data.Created_at,
+        Updated_at: data.Updated_at,
+      };
+      dispatch(setOrders([selectedItem]));
+      router.push("/products/checkout");
+    } else {
+      handleToast("error", "Pilih ukuran yang diinginkan");
+    }
+  };
+
+  // Price Format
+  const formatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  });
+
+  return (
+    <>
+      <Header />
+      <div className="container flex flex-col sm:flex-row p-4 pt-20 min-h-screen mb-10">
+        {/* Carousel for Product Images */}
+        <Carousel className="sm:w-1/3">
+          <CarouselContent>
+            {data.Image.map((url, i) => (
+              <CarouselItem key={i}>
+                <Image
+                  src={url}
+                  alt={`Product Image ${i + 1}`}
+                  width={800}
+                  height={600}
+                  className="w-full h-auto"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+
+        {/* Product Details */}
+        <div className="sm:w-2/3 p-4 sm:ml-10 text-justify sm:text-left mt-10">
+          <h1 className="text-2xl font-bold mb-2">{data.Name}</h1>
+          <p className="mb-4 text-primary">{data.Description}</p>
+          <h1 className="text-destructive">{formatter.format(data.Price)}</h1>
+          <p className="mb-4 text-gray-400">Stok: {data.Stock}</p>
+
+          {/* Size Selection */}
+          <div className="mb-4">
+            <div className="mb-2">Ukuran</div>
+            <div className="flex gap-2">
+              {data.Size.map((s) => (
+                <Button
+                  key={s}
+                  onClick={() => setSelectedSize(s)}
+                  className={`${
+                    selectedSize === s
+                      ? "bg-primary text-white hover:text-white"
+                      : "bg-secondary text-primary hover:text-white"
+                  }`}
+                >
+                  {s}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quantity Adjustment */}
+          <div className="flex items-center mb-4 space-x-9">
+            <p>Jumlah</p>
+            <div>
+              <Button
+                onClick={decreaseQuantity}
+                variant="secondary"
+                className="size-8 text-xl rounded-none"
+              >
+                -
+              </Button>
+              <input
+                type="text"
+                value={quantity}
+                readOnly
+                className="text-center w-12 h-8 border-2 border-secondary pt-[2px]"
+              />
+              <Button
+                onClick={increaseQuantity}
+                variant="secondary"
+                className="size-8 text-xl rounded-none"
+              >
+                +
+              </Button>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-2">
+            <Button
+              onClick={handleAddToCart}
+              className="bg-primary text-white px-4 py-2 rounded"
+            >
+              <span className="hidden sm:flex">Tambah ke&nbsp;</span>Keranjang
+            </Button>
+            <Button
+              onClick={handleBuyNow}
+              className="bg-gradient text-white px-4 py-2 rounded hover:bg-destructive hover:opacity-95"
+            >
+              Beli Sekarang
+            </Button>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+}
