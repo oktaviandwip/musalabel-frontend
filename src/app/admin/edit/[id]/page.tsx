@@ -216,7 +216,7 @@ export default function EditProduct({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-wrap gap-4">
               {selectedImages.map((src, index) => (
-                <div key={src} className="relative w-32 h-48 group">
+                <div key={index} className="relative w-32 h-48 group">
                   <Image
                     src={src}
                     alt={`Selected image ${index + 1}`}

@@ -6,11 +6,6 @@ import Image from "next/image";
 import logo from "@/assets/musalabel-logo.svg";
 import photoProfile from "@/assets/photo-profile.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/store/reducer/auth";
 import { getProfile } from "@/store/reducer/user";
@@ -169,7 +164,7 @@ export default function Header() {
               </div>
             </div>
 
-            <HoverCard>
+            <div>
               <div className="flex lg:hidden bg-white mt-[2px]">
                 <Icon
                   icon="mage:dash-menu"
@@ -231,7 +226,7 @@ export default function Header() {
                   Keluar
                 </Button>
               </div>
-            </HoverCard>
+            </div>
           </div>
         ) : (
           <div>
