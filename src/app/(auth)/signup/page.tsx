@@ -49,9 +49,9 @@ export default function Signup() {
       description: desc,
       className: `${
         type === "success"
-          ? "bg-secondary text-primary"
+          ? "bg-success text-white"
           : "bg-destructive text-white"
-      } fixed top-0 flex items-center justify-center inset-x-0 p-4 border-none rounded-none`,
+      } fixed top-0 flex items-center justify-center inset-x-0 md:w-96 md:mx-auto p-4 border-none rounded-none md:rounded-lg z-[999]`,
     });
   };
 

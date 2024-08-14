@@ -81,9 +81,9 @@ export default function CreateProduct() {
       description: desc,
       className: `${
         type === "success"
-          ? "bg-secondary text-primary"
+          ? "bg-success text-white"
           : "bg-destructive text-white"
-      } fixed top-0 flex items-center justify-center inset-x-0 md:w-96 md:mx-auto p-4 border-none rounded-none`,
+      } fixed top-0 flex items-center justify-center inset-x-0 md:w-96 md:mx-auto p-4 border-none rounded-none md:rounded-lg z-[999]`,
     });
   };
 
@@ -115,6 +115,7 @@ export default function CreateProduct() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     const formData = new FormData();
 
     values.image.forEach((file) => {
@@ -134,6 +135,9 @@ export default function CreateProduct() {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        setIsLoading(false);
+        handleToast("success", data.description);
         router.push("/admin");
       } else {
         const error = await res.json();
@@ -331,11 +335,7 @@ export default function CreateProduct() {
               >
                 Kembali
               </Button>
-              <Button
-                type="submit"
-                onClick={() => setIsLoading(true)}
-                className="w-1/2 md:w-24"
-              >
+              <Button type="submit" className="w-1/2 md:w-24">
                 Simpan
               </Button>
             </div>
